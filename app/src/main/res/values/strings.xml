@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="splash_logo_desc">Logo da Spot4You</string>
+
 </resources>
