@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.activity.EdgeToEdge;
 
 public class SplashPage extends AppCompatActivity {
 
@@ -15,16 +14,10 @@ public class SplashPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_page);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashPage.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashPage.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }, SPLASH_DURATION);
     }
 }
-
-
-
