@@ -53,6 +53,18 @@
         android:paddingVertical="12dp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/forgotbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Forgot password?"
+        android:textColor="@color/blue"
+        android:backgroundTint="@color/lightGray"
+        android:paddingVertical="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
     <Button
         android:id="@+id/regbtn"
         android:layout_width="match_parent"
