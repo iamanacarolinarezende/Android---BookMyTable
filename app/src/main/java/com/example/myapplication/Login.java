@@ -18,6 +18,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
     EditText emailEditText, passwordEditText;
@@ -75,9 +79,9 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     Toast.makeText(Login.this, "Login Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    String userId = user.getUid(); // Obtenha o ID do usuário
+                    redirectToAppropriateActivity(userId); // Redirecionar baseado no tipo
                 }
                 else{
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
@@ -104,5 +108,63 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+    private void redirectToAppropriateActivity(String userId) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DataSnapshot dataSnapshot = task.getResult();
+                    String userType = dataSnapshot.child("type").getValue(String.class);
+
+                    // Verifica o tipo do usuário e cria a Intent apropriada
+                    Intent intent;
+                    if ("customer".equals(userType)) {
+                        // Carrega os dados do customer
+                        String phone = dataSnapshot.child("phone").getValue(String.class);
+                        // Adicione outros dados conforme necessário
+
+                        intent = new Intent(Login.this, MainActivity.class);
+                        intent.putExtra("userPhone", phone); // Passa o telefone do cliente
+                    } else if ("restaurant".equals(userType)) {
+                        // Carrega os dados do restaurante
+                        String name = dataSnapshot.child("name").getValue(String.class);
+                        String address = dataSnapshot.child("address").getValue(String.class);
+                        String tables = dataSnapshot.child("tables").getValue(String.class);
+                        String phone = dataSnapshot.child("phone").getValue(String.class);
+                        // Adicione outros dados conforme necessário
+
+                        intent = new Intent(Login.this, RestaurantMainActivity.class);
+                        intent.putExtra("restaurantName", name); // Passa o nome do restaurante
+                        intent.putExtra("restaurantAddress", address); // Passa o endereço do restaurante
+                        intent.putExtra("restaurantTables", tables); // Passa o número de mesas do restaurante
+                        intent.putExtra("restaurantPhone", phone); // Passa o telefone do restaurante
+                    } else {
+                        // Tipo de usuário não reconhecido
+                        Toast.makeText(Login.this, "User type not recognized", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    startActivity(intent);
+                    finish(); // Finaliza a atividade atual
+                } else {
+                    Toast.makeText(Login.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    //To remember the login when user come back
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+//        if (currentUser != null) {
+//            Intent intent = new Intent(login.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//    }
 
 }

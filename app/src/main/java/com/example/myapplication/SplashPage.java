@@ -15,7 +15,7 @@ public class SplashPage extends AppCompatActivity {
         setContentView(R.layout.activity_splash_page);
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashPage.this, Register.class);
+            Intent intent = new Intent(SplashPage.this, Login.class);
             startActivity(intent);
             finish();
         }, 3000);
