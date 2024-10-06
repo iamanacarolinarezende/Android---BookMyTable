@@ -31,7 +31,6 @@ public class RegisterCompanyInfo extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register_company_info);
 
-        // Initialize EditTexts and Buttons
         EditText restaurantNameEditText = findViewById(R.id.restaurantNameEditText);
         EditText restaurantAddressEditText = findViewById(R.id.restaurantAddressEditText);
         EditText restaurantPhoneEditText = findViewById(R.id.restaurantPhoneEditText);
@@ -39,7 +38,6 @@ public class RegisterCompanyInfo extends AppCompatActivity {
         Button restaurantRegisterButton = findViewById(R.id.restaurantRegisterbtn);
         Button restaurantCancelButton = findViewById(R.id.loginregbtn);
 
-        // Initialize FirebaseAuth
         firebaseAuth = FirebaseAuth.getInstance();
 
         restaurantCancelButton.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +58,6 @@ public class RegisterCompanyInfo extends AppCompatActivity {
                 String phoneNumber = restaurantPhoneEditText.getText().toString().trim();
                 String numberOfTables = restaurantTablesEditText.getText().toString().trim();
 
-                // Call the method to complete the registration
                 completeRestaurantRegistration(restaurantName, address, phoneNumber, numberOfTables);
             }
         });

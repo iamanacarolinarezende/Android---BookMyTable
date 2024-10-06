@@ -118,36 +118,31 @@ public class Login extends AppCompatActivity {
                     DataSnapshot dataSnapshot = task.getResult();
                     String userType = dataSnapshot.child("type").getValue(String.class);
 
-                    // Verifica o tipo do usuário e cria a Intent apropriada
                     Intent intent;
                     if ("customer".equals(userType)) {
-                        // Carrega os dados do customer
                         String phone = dataSnapshot.child("phone").getValue(String.class);
-                        // Adicione outros dados conforme necessário
 
                         intent = new Intent(Login.this, MainActivity.class);
-                        intent.putExtra("userPhone", phone); // Passa o telefone do cliente
+                        intent.putExtra("userPhone", phone);
                     } else if ("restaurant".equals(userType)) {
                         // Carrega os dados do restaurante
                         String name = dataSnapshot.child("name").getValue(String.class);
                         String address = dataSnapshot.child("address").getValue(String.class);
                         String tables = dataSnapshot.child("tables").getValue(String.class);
                         String phone = dataSnapshot.child("phone").getValue(String.class);
-                        // Adicione outros dados conforme necessário
 
                         intent = new Intent(Login.this, RestaurantMainActivity.class);
-                        intent.putExtra("restaurantName", name); // Passa o nome do restaurante
-                        intent.putExtra("restaurantAddress", address); // Passa o endereço do restaurante
-                        intent.putExtra("restaurantTables", tables); // Passa o número de mesas do restaurante
-                        intent.putExtra("restaurantPhone", phone); // Passa o telefone do restaurante
+                        intent.putExtra("restaurantName", name);
+                        intent.putExtra("restaurantAddress", address);
+                        intent.putExtra("restaurantTables", tables);
+                        intent.putExtra("restaurantPhone", phone);
                     } else {
-                        // Tipo de usuário não reconhecido
                         Toast.makeText(Login.this, "User type not recognized", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     startActivity(intent);
-                    finish(); // Finaliza a atividade atual
+                    finish();
                 } else {
                     Toast.makeText(Login.this, "Failed to retrieve user data", Toast.LENGTH_SHORT).show();
                 }

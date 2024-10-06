@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashPage extends AppCompatActivity {
 
-    private static final int SPLASH_DURATION = 3000;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

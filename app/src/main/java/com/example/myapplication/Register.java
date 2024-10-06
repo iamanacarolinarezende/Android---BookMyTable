@@ -120,13 +120,11 @@ public class Register extends AppCompatActivity {
                                 String userId = user.getUid();
                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
-                                // Criando os dados do cliente para salvar no banco de dados
                                 HashMap<String, String> customerData = new HashMap<>();
                                 customerData.put("email", user.getEmail());
                                 customerData.put("type", "customer"); // identificando que é cliente
                                 customerData.put("phone", phoneNumber);
 
-                                // Salvar no Firebase Database
                                 databaseReference.child(userId).setValue(customerData).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
