@@ -12,12 +12,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome"
+        android:text="Make your reservation"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/green"
         android:layout_marginTop="14dp"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="24dp"/>
 
     <TextView
         android:id="@+id/showEmail"
@@ -26,5 +26,9 @@
         android:textStyle="bold"
         android:textColor="@color/green"
         android:layout_marginBottom="16dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
