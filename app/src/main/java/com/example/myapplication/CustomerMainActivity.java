@@ -7,9 +7,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class CustomerMainActivity extends AppCompatActivity {
     TextView showEmail;
     FirebaseAuth firebaseAuth;
     private Spinner tableSpinner;

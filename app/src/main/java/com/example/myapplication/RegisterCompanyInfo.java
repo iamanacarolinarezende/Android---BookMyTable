@@ -34,7 +34,6 @@ public class RegisterCompanyInfo extends AppCompatActivity {
         EditText restaurantNameEditText = findViewById(R.id.restaurantNameEditText);
         EditText restaurantAddressEditText = findViewById(R.id.restaurantAddressEditText);
         EditText restaurantPhoneEditText = findViewById(R.id.restaurantPhoneEditText);
-        EditText restaurantTablesEditText = findViewById(R.id.restaurantTablesEditText);
         Button restaurantRegisterButton = findViewById(R.id.restaurantRegisterbtn);
         Button restaurantCancelButton = findViewById(R.id.loginregbtn);
 
@@ -43,7 +42,7 @@ public class RegisterCompanyInfo extends AppCompatActivity {
         restaurantCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RegisterCompanyInfo.this, Register.class);
+                Intent intent = new Intent(RegisterCompanyInfo.this, RegisterCustomer.class);
                 startActivity(intent);
                 finish();
             }
@@ -56,14 +55,13 @@ public class RegisterCompanyInfo extends AppCompatActivity {
                 String restaurantName = restaurantNameEditText.getText().toString().trim();
                 String address = restaurantAddressEditText.getText().toString().trim();
                 String phoneNumber = restaurantPhoneEditText.getText().toString().trim();
-                String numberOfTables = restaurantTablesEditText.getText().toString().trim();
 
-                completeRestaurantRegistration(restaurantName, address, phoneNumber, numberOfTables);
+                completeRestaurantRegistration(restaurantName, address, phoneNumber);
             }
         });
     }
 
-    private void completeRestaurantRegistration(String restaurantName, String address, String phoneNumber, String numberOfTables) {
+    private void completeRestaurantRegistration(String restaurantName, String address, String phoneNumber) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
@@ -75,7 +73,6 @@ public class RegisterCompanyInfo extends AppCompatActivity {
             restaurantData.put("name", restaurantName);
             restaurantData.put("address", address);
             restaurantData.put("phone", phoneNumber);
-            restaurantData.put("tables", numberOfTables);
             restaurantData.put("type", "restaurant"); // Identifying that it's a restaurant
 
             // Save data to the database

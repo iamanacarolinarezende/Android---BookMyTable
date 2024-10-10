@@ -7,16 +7,11 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class Register extends AppCompatActivity {
+public class RegisterCustomer extends AppCompatActivity {
     EditText emailEditText, passwordEditText, confirmPasswordEditText, phoneNumberEditText;
     Button registerButton, loginregButton, restaurantButton;
     FirebaseAuth firebaseAuth;
@@ -53,7 +48,7 @@ public class Register extends AppCompatActivity {
         loginregButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Register.this, Login.class);
+                Intent intent = new Intent(RegisterCustomer.this, Login.class);
                 startActivity(intent);
                 finish();
             }
@@ -62,7 +57,7 @@ public class Register extends AppCompatActivity {
         restaurantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Register.this, RegisterCompany.class);
+                Intent intent = new Intent(RegisterCustomer.this, RegisterCompany.class);
                 startActivity(intent);
                 finish();
             }
@@ -82,7 +77,7 @@ public class Register extends AppCompatActivity {
         String phoneNumber = phoneNumberEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword) || TextUtils.isEmpty(phoneNumber)) {
-            Toast.makeText(Register.this, "All fields are required", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterCustomer.this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -129,12 +124,12 @@ public class Register extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(Register.this, "Customer registered successfully", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegisterCustomer.this, "Customer registered successfully", Toast.LENGTH_SHORT).show();
                                             // Direcionar para a tela principal do cliente
-                                            startActivity(new Intent(Register.this, MainActivity.class));
+                                            startActivity(new Intent(RegisterCustomer.this, CustomerMainActivity.class));
                                             finish();
                                         } else {
-                                            Toast.makeText(Register.this, "Failed to save customer data", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegisterCustomer.this, "Failed to save customer data", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -142,9 +137,9 @@ public class Register extends AppCompatActivity {
                         }
                         else{
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                Toast.makeText(Register.this, "This email is already registered, please log in.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterCustomer.this, "This email is already registered, please log in.", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(Register.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterCustomer.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

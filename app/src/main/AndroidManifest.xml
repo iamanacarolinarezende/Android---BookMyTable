@@ -25,7 +25,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".Register"
+            android:name=".RegisterCustomer"
             android:exported="false" />
         <activity
             android:name=".SplashPage"
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity> <!-- MainActivity sem intent-filter -->
         <activity
-            android:name=".MainActivity"
+            android:name=".CustomerMainActivity"
             android:exported="true" />
     </application>
 

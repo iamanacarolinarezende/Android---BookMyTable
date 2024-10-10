@@ -10,9 +10,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,7 +42,7 @@ public class Login extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, Register.class);
+                Intent intent = new Intent(Login.this, RegisterCustomer.class);
                 startActivity(intent);
                 finish();
             }
@@ -122,7 +119,7 @@ public class Login extends AppCompatActivity {
                     if ("customer".equals(userType)) {
                         String phone = dataSnapshot.child("phone").getValue(String.class);
 
-                        intent = new Intent(Login.this, MainActivity.class);
+                        intent = new Intent(Login.this, CustomerMainActivity.class);
                         intent.putExtra("userPhone", phone);
                     } else if ("restaurant".equals(userType)) {
                         // Carrega os dados do restaurante

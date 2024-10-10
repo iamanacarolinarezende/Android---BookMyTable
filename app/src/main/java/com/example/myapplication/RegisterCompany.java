@@ -7,16 +7,11 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,9 +19,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
 
 public class RegisterCompany extends AppCompatActivity {
     EditText emailEditText, passwordEditText, confirmPasswordEditText;
@@ -59,7 +51,7 @@ public class RegisterCompany extends AppCompatActivity {
         customerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RegisterCompany.this, Register.class);
+                Intent intent = new Intent(RegisterCompany.this, RegisterCustomer.class);
                 startActivity(intent);
                 finish();
             }

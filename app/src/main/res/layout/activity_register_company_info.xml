@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="24dp"
-    tools:context=".Register">
+    tools:context=".RegisterCustomer">
 
     <ImageView
         android:id="@+id/logo"
@@ -43,13 +43,6 @@
         android:layout_height="wrap_content"
         android:hint="Phone Number"
         android:inputType="phone"/>
-
-    <EditText
-        android:id="@+id/restaurantTablesEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Number of tables available for reservations"
-        android:inputType="number"/>
 
     <Button
         android:id="@+id/restaurantRegisterbtn"
