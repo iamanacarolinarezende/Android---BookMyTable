@@ -29,20 +29,20 @@
         android:layout_marginBottom="16dp"/>
 
     <TextView
-        android:id="@+id/showRestaurant"
+        android:id="@+id/showRestaurantName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textColor="@color/yellow"
-        android:text="Brasilian BBQ - Rodízio"
+        android:text="show restaurant name here"
         android:layout_marginBottom="5dp"/>
 
     <TextView
-        android:id="@+id/showAddress"
+        android:id="@+id/showRestaurantAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/yellow"
-        android:text="100 rue de la viande"
+        android:text="show restaurant address here"
         android:layout_marginBottom="5dp"/>
 
     <TextView
@@ -56,7 +56,29 @@
         android:id="@+id/TableSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:spinnerMode="dropdown">
-    </Spinner>
+        android:spinnerMode="dropdown"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"/>
+
+
+    <Spinner
+        android:id="@+id/dateSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/makeReservationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make your reservation"/>
+
+
 
 </LinearLayout>

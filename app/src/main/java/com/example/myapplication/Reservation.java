@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -22,6 +23,7 @@ public class Reservation extends AppCompatActivity {
     TextView showEmail;
     FirebaseAuth firebaseAuth;
     private Spinner tableSpinner;
+    private Spinner dateSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,5 +54,29 @@ public class Reservation extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, numberOfPersons);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tableSpinner.setAdapter(adapter);
+
+
+        dateSpinner = findViewById(R.id.dateSpinner);
+        dateSpinner.setSelection(0); // The today date
+        // to select another date
+        dateSpinner.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    Reservation.this,
+                    (view, year, month, dayOfMonth) -> {
+                        // Formatar a data selecionada como "dd/MM/yyyy"
+                        String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                        // Definir a data selecionada no Spinner
+                        tableSpinner.setSelection(0);
+                        ArrayAdapter<String> newAdapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_spinner_item, Arrays.asList(selectedDate));
+                        newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        tableSpinner.setAdapter(newAdapter);
+                    },
+                    java.util.Calendar.getInstance().get(java.util.Calendar.YEAR),
+                    java.util.Calendar.getInstance().get(java.util.Calendar.MONTH),
+                    java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH)
+            );
+            datePickerDialog.show();
+        });
     }
 }
