@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,9 +23,12 @@ public class RestaurantMainActivity extends AppCompatActivity {
 
     TextView showEmail;
     FirebaseAuth firebaseAuth;
-    RecyclerView pendingReservationsList;
-    ReservationAdapter reservationAdapter;
-    List<String> reservations = new ArrayList<>(); // Lista de reservas a ser populada com os dados do Firebase
+    RecyclerView pendingReservationsList, ongoingReservationsList;
+    PendingReservationsAdapter pendingReservationAdapter;
+    OnGoingReservationsAdapter ongoingReservationAdapter;
+
+    List<Reservation> pendingReservations = new ArrayList<>(); // List for pending reservations
+    List<Reservation> ongoingReservations = new ArrayList<>(); // List for ongoing reservations
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,61 +36,69 @@ public class RestaurantMainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_restaurant_main);
 
-        // Inicializa o RecyclerView
+        // Initialize RecyclerViews
         pendingReservationsList = findViewById(R.id.pendingReservationsRecyclerView);
-        pendingReservationsList.setLayoutManager(new LinearLayoutManager(this));
+        ongoingReservationsList = findViewById(R.id.onGoingReservationsRecyclerView);
 
-        // Inicializa o Adapter
-        reservationAdapter = new ReservationAdapter(reservations, new ReservationAdapter.OnReservationActionListener() {
+        pendingReservationsList.setLayoutManager(new LinearLayoutManager(this));
+        ongoingReservationsList.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize Adapters
+        pendingReservationAdapter = new PendingReservationsAdapter(pendingReservations, new PendingReservationsAdapter.OnReservationActionListener() {
             @Override
             public void onAccept(int position) {
-                // Lógica para aceitar a reserva
-                String reservation = reservations.get(position);
-                // Exemplo de ação: remover da lista
-                reservations.remove(position);
-                reservationAdapter.notifyItemRemoved(position);
+                // Logic for accepting a reservation
+                Reservation reservation = pendingReservations.get(position);
+                ongoingReservations.add(reservation); // Add to ongoing reservations
+                pendingReservations.remove(position); // Remove from pending
+                pendingReservationAdapter.notifyItemRemoved(position);
+                ongoingReservationAdapter.notifyDataSetChanged(); // Refresh ongoing reservations
             }
 
             @Override
             public void onReject(int position) {
-                // Lógica para rejeitar a reserva
-                String reservation = reservations.get(position);
-                // Exemplo de ação: remover da lista
-                reservations.remove(position);
-                reservationAdapter.notifyItemRemoved(position);
+                // Logic for rejecting a reservation
+                pendingReservations.remove(position);
+                pendingReservationAdapter.notifyItemRemoved(position);
             }
         });
 
-        pendingReservationsList.setAdapter(reservationAdapter);
+        ongoingReservationAdapter = new OnGoingReservationsAdapter(ongoingReservations);
 
-        // Chama o método para buscar dados no Firebase
+        pendingReservationsList.setAdapter(pendingReservationAdapter);
+        ongoingReservationsList.setAdapter(ongoingReservationAdapter);
+
+        // Call method to load data from Firebase
         loadReservationsFromFirebase();
     }
 
     private void loadReservationsFromFirebase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("reservations");
 
-        // Adiciona o listener para recuperar os dados do Firebase
+        // Add listener to retrieve data from Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                reservations.clear(); // Limpa a lista antes de adicionar novos dados
+                pendingReservations.clear();
+                ongoingReservations.clear();
 
-                // Itera sobre cada reserva no banco de dados
                 for (DataSnapshot reservationSnapshot : dataSnapshot.getChildren()) {
-                    // Aqui você pega os campos "Customer" e "NumberOfPeople"
                     String customer = reservationSnapshot.child("Customer").getValue(String.class);
                     String numberOfPeople = reservationSnapshot.child("NumberOfPeople").getValue(String.class);
+                    String status = reservationSnapshot.child("Status").getValue(String.class); // Assuming you have a status field
 
-                    // Concatena os campos
-                    String reservationText = customer + " - " + numberOfPeople + " people";
+                    Reservation reservation = new Reservation(customer, numberOfPeople, status);
 
-                    // Adiciona à lista
-                    reservations.add(reservationText);
+                    if ("pending".equalsIgnoreCase(status)) {
+                        pendingReservations.add(reservation); // Add to pending reservations
+                    } else if ("accepted".equalsIgnoreCase(status)) {
+                        ongoingReservations.add(reservation); // Add to ongoing reservations
+                    }
                 }
 
-                // Notifica o Adapter que os dados mudaram
-                reservationAdapter.notifyDataSetChanged();
+                // Notify adapters that data has changed
+                pendingReservationAdapter.notifyDataSetChanged();
+                ongoingReservationAdapter.notifyDataSetChanged();
             }
 
             @Override

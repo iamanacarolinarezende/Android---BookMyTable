@@ -79,4 +79,10 @@ public class Reservation extends AppCompatActivity {
             datePickerDialog.show();
         });
     }
+
+    public char[] getCustomer() {
+    }
+
+    public Object getNumberOfPeople() {
+    }
 }
