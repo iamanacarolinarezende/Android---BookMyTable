@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="24dp"
-    tools:context=".RegisterCustomer">
+    tools:context=".RegisterCompany">
 
     <ImageView
         android:id="@+id/logo"
@@ -28,20 +28,26 @@
         android:id="@+id/restaurantNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Restaurant Name"/>
+        android:hint="Restaurant Name"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/restaurantAddressEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Address"/>
+        android:hint="Address"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/restaurantPhoneEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone Number"
-        android:inputType="phone"/>
+        android:inputType="phone"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"/>
 
     <Button
         android:id="@+id/restaurantRegisterbtn"
@@ -53,6 +59,7 @@
         android:paddingVertical="12dp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
+
     <Button
         android:id="@+id/loginregbtn"
         android:layout_width="match_parent"
@@ -62,7 +69,5 @@
         android:backgroundTint="@color/white"
         android:paddingVertical="12dp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        />
-
+        android:layout_marginBottom="16dp" />
 </LinearLayout>
