@@ -56,7 +56,22 @@
         android:id="@+id/TableSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:spinnerMode="dropdown">
+        android:spinnerMode="dropdown"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/dateSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
     </Spinner>
 
 </LinearLayout>
