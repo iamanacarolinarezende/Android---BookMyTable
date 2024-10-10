@@ -15,9 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomerMainActivity extends AppCompatActivity {
-    TextView showEmail;
-    FirebaseAuth firebaseAuth;
-    private Spinner tableSpinner;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,25 +25,10 @@ public class CustomerMainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        showEmail = findViewById(R.id.showEmail);
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        String emailUser = " ";
-        if (currentUser != null) {
-            emailUser = currentUser.getEmail();
-            showEmail.setText(emailUser);
-        }
 
 
-        // Spinner to select the size of the party. From 1 to 4, in this case.
-        // for more restaurants, need to take it from the database
-        tableSpinner = findViewById(R.id.TableSpinner);
-        List<String> numberOfPersons = Arrays.asList("1", "2", "3", "4");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, numberOfPersons);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tableSpinner.setAdapter(adapter);
+
+
 
 
     }

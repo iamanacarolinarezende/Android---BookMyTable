@@ -1,10 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Reservation">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:id="@+id/registerCustomer"
+    tools:context=".RegisterCustomer">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make your reservation"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/showEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/showRestaurant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/yellow"
+        android:text="Brasilian BBQ - Rodízio"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/showAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/yellow"
+        android:text="100 rue de la viande"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/lightGray"
+        android:text="Please, select the party size, date and time"
+        android:layout_marginBottom="5dp"/>
+
+    <Spinner
+        android:id="@+id/TableSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown">
+    </Spinner>
+
+</LinearLayout>
