@@ -24,7 +24,7 @@ public class RestaurantMainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        String emailUser = "";
+        String emailUser;
         if (currentUser != null) {
             emailUser = currentUser.getEmail();
             showEmail.setText(emailUser);
