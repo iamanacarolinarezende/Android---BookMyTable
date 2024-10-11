@@ -3,8 +3,10 @@ package com.example.myapplication;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,9 +58,22 @@ public class Reservation extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tableSpinner.setAdapter(adapter);
 
+        /*
         Spinner dateSpinner;
-
         dateSpinner = findViewById(R.id.dateSpinner);
+        */
+
+
+        // No método onCreate da Activity
+        DatePicker datePickerInline = findViewById(R.id.datePickerInline);
+        datePickerInline.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                // Processar a data selecionada
+                Toast.makeText(Reservation.this, "Data selecionada: " + selectedDate, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }
