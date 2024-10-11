@@ -5,12 +5,12 @@
       <config />
     </shared>
     <layouts>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_client_main.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
         </config>
@@ -56,8 +56,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation">
+    <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="Refactory second try - activity_main to activity_client_main.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerMainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_client_main.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +144,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="_Designer_Tab" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -371,7 +374,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728580389644</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Refactory - activity_main to activity_client_main">
+      <option name="closed" value="true" />
+      <created>1728666860506</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1728666860506</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Refactory second try - activity_main to activity_client_main.">
+      <option name="closed" value="true" />
+      <created>1728667229566</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1728667229566</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -397,6 +416,8 @@
     <MESSAGE value="First spinner. Number of persons on the table" />
     <MESSAGE value="Reservation layout. Starting" />
     <MESSAGE value="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation" />
-    <option name="LAST_COMMIT_MESSAGE" value="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation" />
+    <MESSAGE value="Refactory - activity_main to activity_client_main" />
+    <MESSAGE value="Refactory second try - activity_main to activity_client_main." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactory second try - activity_main to activity_client_main." />
   </component>
 </project>
