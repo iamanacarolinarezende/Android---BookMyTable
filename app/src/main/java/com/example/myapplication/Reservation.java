@@ -1,79 +1,56 @@
 package com.example.myapplication;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Reservation extends AppCompatActivity {
 
-    TextView showEmail;
-    FirebaseAuth firebaseAuth;
-
+    private TextView showEmail, showRestaurantName, showRestaurantAddress;
+    private Spinner tableSpinner;
+    private DatePicker datePicker;
+    private Button makeReservationBtn;
+    private FirebaseAuth firebaseAuth;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reservation);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerCustomer), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
+        // Inicializa as views
         showEmail = findViewById(R.id.showEmail);
+        showRestaurantName = findViewById(R.id.showRestaurantName);
+        showRestaurantAddress = findViewById(R.id.showRestaurantAddress);
+        tableSpinner = findViewById(R.id.TableSpinner);
+        datePicker = findViewById(R.id.datePickerInline);
+        makeReservationBtn = findViewById(R.id.makeReservationBtn);
+
+        // Inicializa Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
 
+        // Obtém o usuário atual
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        String emailUser;
         if (currentUser != null) {
-            emailUser = currentUser.getEmail();
-            showEmail.setText(emailUser);
+            showEmail.setText(currentUser.getEmail());
         }
 
-        Spinner tableSpinner;
+        // Recebe o restaurante selecionado e o endereço
+        String selectedRestaurant = getIntent().getStringExtra("selectedRestaurant");
+        String restaurantAddress = getIntent().getStringExtra("restaurantAddress");
 
-        // Spinner to select the size of the party. From 1 to 4, in this case.
-        // for more restaurants, need to take it from the database
-        tableSpinner = findViewById(R.id.TableSpinner);
-        List<String> numberOfPersons = Arrays.asList("1", "2", "3", "4");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, numberOfPersons);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tableSpinner.setAdapter(adapter);
-
-        /*
-        Spinner dateSpinner;
-        dateSpinner = findViewById(R.id.dateSpinner);
-        */
-
-
-        // No método onCreate da Activity
-        DatePicker datePickerInline = findViewById(R.id.datePickerInline);
-        datePickerInline.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                // Processar a data selecionada
-                Toast.makeText(Reservation.this, "Data selecionada: " + selectedDate, Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        if (selectedRestaurant != null) {
+            showRestaurantName.setText(selectedRestaurant);
+            showRestaurantAddress.setText(restaurantAddress);
+            Log.d("Reservation", "Selected Restaurant: " + selectedRestaurant);
+        }
     }
 }
