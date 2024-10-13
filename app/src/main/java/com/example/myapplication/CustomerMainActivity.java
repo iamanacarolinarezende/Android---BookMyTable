@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,7 +22,7 @@ public class CustomerMainActivity extends AppCompatActivity {
     private ListView restaurantListView;
     private Button restaurantSelectionBtn;
     private ArrayList<Restaurant> restaurantList;
-    private RestaurantAdapter adapter; // Usando o RestaurantAdapter
+    private RestaurantAdapter adapter; //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +33,9 @@ public class CustomerMainActivity extends AppCompatActivity {
         restaurantSelectionBtn = findViewById(R.id.restaurantSelectionBtnId);
 
         restaurantList = new ArrayList<>();
-        adapter = new RestaurantAdapter(this, restaurantList); // Usando o adaptador personalizado
+        adapter = new RestaurantAdapter(this, restaurantList);
         restaurantListView.setAdapter(adapter);
-        restaurantListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE); // Permite seleção única
+        restaurantListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
@@ -47,10 +46,10 @@ public class CustomerMainActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Restaurant restaurant = snapshot.getValue(Restaurant.class);
                     if (restaurant != null && "restaurant".equals(restaurant.getType())) {
-                        restaurantList.add(restaurant); // Adiciona o objeto Restaurant à lista
+                        restaurantList.add(restaurant);
                     }
                 }
-                adapter.notifyDataSetChanged(); // Notifica o adaptador sobre a mudança nos dados
+                adapter.notifyDataSetChanged();
             }
 
             @Override
