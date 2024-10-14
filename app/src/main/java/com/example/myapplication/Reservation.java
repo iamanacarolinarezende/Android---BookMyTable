@@ -76,10 +76,4 @@ public class Reservation extends AppCompatActivity {
         });
 
     }
-
-    public char[] getCustomer() {
-    }
-
-    public Object getNumberOfPeople() {
-    }
 }

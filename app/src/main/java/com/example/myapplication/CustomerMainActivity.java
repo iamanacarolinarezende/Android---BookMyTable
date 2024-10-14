@@ -1,8 +1,7 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,8 +21,8 @@ public class CustomerMainActivity extends AppCompatActivity {
 
     private ListView restaurantListView;
     private Button restaurantSelectionBtn;
-    private ArrayList<String> restaurantList;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Restaurant> restaurantList;
+    private RestaurantAdapter adapter; //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +32,12 @@ public class CustomerMainActivity extends AppCompatActivity {
         restaurantListView = findViewById(R.id.restaurantListView);
         restaurantSelectionBtn = findViewById(R.id.restaurantSelectionBtnId);
 
-
         restaurantList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, restaurantList);
+        adapter = new RestaurantAdapter(this, restaurantList);
         restaurantListView.setAdapter(adapter);
+        restaurantListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users"); // ajuste o nome da tabela se necessário
-
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -49,7 +46,7 @@ public class CustomerMainActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Restaurant restaurant = snapshot.getValue(Restaurant.class);
                     if (restaurant != null && "restaurant".equals(restaurant.getType())) {
-                        restaurantList.add(restaurant.getName());
+                        restaurantList.add(restaurant);
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -61,10 +58,21 @@ public class CustomerMainActivity extends AppCompatActivity {
             }
         });
 
-        // Configurar o botão de seleção de restaurante
         restaurantSelectionBtn.setOnClickListener(view -> {
+            int selectedPosition = restaurantListView.getCheckedItemPosition();
+            if (selectedPosition != ListView.INVALID_POSITION) {
+                Restaurant selectedRestaurantObj = restaurantList.get(selectedPosition);
+                String selectedRestaurantName = selectedRestaurantObj.getName();
+                String selectedRestaurantAddress = selectedRestaurantObj.getAddress();
 
+                // Inicia a nova Activity e passa os dados
+                Intent intent = new Intent(CustomerMainActivity.this, Reservation.class);
+                intent.putExtra("selectedRestaurant", selectedRestaurantName); // Passa o nome do restaurante
+                intent.putExtra("restaurantAddress", selectedRestaurantAddress); // Passa o endereço do restaurante
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Please select a restaurant", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
-
