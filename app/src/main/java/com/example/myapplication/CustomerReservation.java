@@ -1,19 +1,26 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.Button;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import android.view.MenuItem;
+
 
 public class CustomerReservation extends AppCompatActivity {
 
@@ -23,6 +30,8 @@ public class CustomerReservation extends AppCompatActivity {
     EditText editTextTime;
     EditText partySizeEditText;
     Button submitBtn;
+    FirebaseAuth firebaseAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +44,17 @@ public class CustomerReservation extends AppCompatActivity {
         editTextTime = findViewById(R.id.editTextTime);
         partySizeEditText = findViewById(R.id.partySizeEditText);
         submitBtn = findViewById(R.id.submit);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //Menu Images
+        ImageView home = findViewById(R.id.navigation_home);
+        ImageView user = findViewById(R.id.navigation_user);
+        ImageView logout = findViewById(R.id.navigation_logout);
+
 
         String name = getIntent().getStringExtra("selectedRestaurant");
         String address = getIntent().getStringExtra("restaurantAddress");
-        String user = getIntent().getStringExtra("email");
+        String userEmail = getIntent().getStringExtra("email");
 
         nameInput.setText(name);
         addressInput.setText(address);
@@ -90,7 +106,7 @@ public class CustomerReservation extends AppCompatActivity {
                     restaurantName,
                     "Pending",
                     time,
-                    user
+                    userEmail
             );
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("reservations");
@@ -106,6 +122,42 @@ public class CustomerReservation extends AppCompatActivity {
                             }
                         });
             }
-        });;
+        });
+
+        //Menu Start
+        // Home button
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomerReservation.this, CustomerMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Send to register page
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomerReservation.this, RegisterCustomer.class);
+                startActivity(intent);
+            }
+        });
+
+        //Logout button
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                Toast.makeText(CustomerReservation.this, "You are logged out", Toast.LENGTH_SHORT).show();
+
+                // Redirect to Login activity
+                Intent intent = new Intent(CustomerReservation.this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
     }
 }

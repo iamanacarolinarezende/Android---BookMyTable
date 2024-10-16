@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,7 @@ public class CustomerMainActivity extends AppCompatActivity {
     ListView restaurantListView;
     ArrayList<Restaurant> restaurantList;
     RestaurantAdapter adapter;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,12 @@ public class CustomerMainActivity extends AppCompatActivity {
         restaurantList = new ArrayList<>();
         adapter = new RestaurantAdapter(this, restaurantList);
         restaurantListView.setAdapter(adapter);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //Menu Images
+        ImageView home = findViewById(R.id.navigation_home);
+        ImageView user = findViewById(R.id.navigation_user);
+        ImageView logout = findViewById(R.id.navigation_logout);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
@@ -76,6 +85,41 @@ public class CustomerMainActivity extends AppCompatActivity {
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Please select a restaurant", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Menu Start
+        // Home button
+        home.setSelected(true);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Send to register page
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomerMainActivity.this, RegisterCustomer.class);
+                startActivity(intent);
+            }
+        });
+
+        //Logout button
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                Toast.makeText(CustomerMainActivity.this, "You are logged out", Toast.LENGTH_SHORT).show();
+
+                // Redirect to Login activity
+                Intent intent = new Intent(CustomerMainActivity.this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+                startActivity(intent);
+                finish();
             }
         });
     }

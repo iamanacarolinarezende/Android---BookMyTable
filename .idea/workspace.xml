@@ -50,7 +50,7 @@
           <theme>@style/Theme.MyApplication</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/menu_bottom_nav.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml">
         <config>
           <theme>@style/Theme.MyApplication</theme>
         </config>
@@ -61,7 +61,26 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="New implementations to functionalities" />
+    <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="fixed menu and start to make it works on different xml">
+      <change beforePath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerMainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerReservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerReservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_customer_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_customer_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_customer_reservation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_customer_reservation.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,7 +89,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\Guilherme\.android\avd\Medium_Phone_API_35.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\pluck\.android\avd\Pixel_8_API_35.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -117,8 +136,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="resourceFile" />
         <option value="Class" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
@@ -139,8 +158,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/iamanacarolinarezende/Android-Spot4You&quot;,
-    &quot;accountId&quot;: &quot;e22d3365-2603-4c89-95b0-d49ff51456a9&quot;
+    &quot;url&quot;: &quot;https://github.com/iamanacarolinarezende/Android-Spot4You.git&quot;,
+    &quot;accountId&quot;: &quot;4bebf754-9f53-4085-88e9-1fcc87253362&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -161,13 +180,15 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_directory_selection&quot;: &quot;C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Guilherme/AndroidStudioProjects/Class1&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dlins/Lasalle/4-Android/Android-Spot4You&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
   }
@@ -179,11 +200,12 @@
     <key name="android.template.-1366844987">
       <recent name="com.example.myapplication" />
     </key>
-    <key name="android.template.1456496191">
-      <recent name="com.example.myapplication" />
-    </key>
     <key name="android.template.-1514106115">
       <recent name="com.example.myapplication" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\pluck\AndroidStudioProjects\Android-Spot4You\app\src\main\res\menu" />
+      <recent name="C:\Users\pluck\AndroidStudioProjects\Android-Spot4You\app\src\main\res\layout" />
     </key>
     <key name="android.template.19657185">
       <recent name="com.example.myapplication" />
@@ -368,55 +390,31 @@
       <option name="project" value="LOCAL" />
       <updated>1728580060790</updated>
     </task>
-    <task id="LOCAL-00013" summary="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation">
+    <task id="LOCAL-00013" summary="Reservation layout. Starting">
       <option name="closed" value="true" />
-      <created>1728580389644</created>
+      <created>1728760106317</created>
       <option name="number" value="00013" />
       <option name="presentableId" value="LOCAL-00013" />
       <option name="project" value="LOCAL" />
-      <updated>1728580389644</updated>
+      <updated>1728760106317</updated>
     </task>
-    <task id="LOCAL-00014" summary="Creating new layout for reservation">
+    <task id="LOCAL-00014" summary="Reservation layout. Starting">
       <option name="closed" value="true" />
-      <created>1728589982097</created>
+      <created>1728763518793</created>
       <option name="number" value="00014" />
       <option name="presentableId" value="LOCAL-00014" />
       <option name="project" value="LOCAL" />
-      <updated>1728589982097</updated>
+      <updated>1728763518793</updated>
     </task>
-    <task id="LOCAL-00015" summary="Creating new layout for reservation">
+    <task id="LOCAL-00015" summary="fixed menu and start to make it works on different xml">
       <option name="closed" value="true" />
-      <created>1728591356903</created>
+      <created>1729056249951</created>
       <option name="number" value="00015" />
       <option name="presentableId" value="LOCAL-00015" />
       <option name="project" value="LOCAL" />
-      <updated>1728591356903</updated>
+      <updated>1729056249951</updated>
     </task>
-    <task id="LOCAL-00016" summary="New implementations to functionalities">
-      <option name="closed" value="true" />
-      <created>1729037515151</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1729037515151</updated>
-    </task>
-    <task id="LOCAL-00017" summary="New implementations to functionalities">
-      <option name="closed" value="true" />
-      <created>1729044966327</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1729044966327</updated>
-    </task>
-    <task id="LOCAL-00018" summary="New implementations to functionalities">
-      <option name="closed" value="true" />
-      <created>1729046694155</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1729046694155</updated>
-    </task>
-    <option name="localTasksCounter" value="19" />
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -441,9 +439,7 @@
     <MESSAGE value="fixed some issues" />
     <MESSAGE value="First spinner. Number of persons on the table" />
     <MESSAGE value="Reservation layout. Starting" />
-    <MESSAGE value="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation" />
-    <MESSAGE value="Creating new layout for reservation" />
-    <MESSAGE value="New implementations to functionalities" />
-    <option name="LAST_COMMIT_MESSAGE" value="New implementations to functionalities" />
+    <MESSAGE value="fixed menu and start to make it works on different xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed menu and start to make it works on different xml" />
   </component>
 </project>

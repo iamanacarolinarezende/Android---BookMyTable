@@ -1,8 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="start"
     android:padding="24dp">
@@ -132,14 +135,72 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/green"
         android:text="Submit"
-        android:layout_marginBottom="300dp"/>
+        android:layout_marginBottom="10dp"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <!-- Menu -->
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/menu_bottom_nav"
-        android:background="@android:color/transparent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+        <TableLayout
+            android:id="@+id/menu_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:stretchColumns="*"
+            android:background="@android:color/transparent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <!-- Home -->
+                <ImageView
+                    android:id="@+id/navigation_home"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/home"
+                    android:contentDescription="Home"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/menu_background" />
+
+
+                <!-- User -->
+                <ImageView
+                    android:id="@+id/navigation_user"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/user"
+                    android:contentDescription="User"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+
+                <!-- Logout -->
+                <ImageView
+                    android:id="@+id/navigation_logout"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/logout"
+                    android:contentDescription="Log Out"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
 
 </LinearLayout>

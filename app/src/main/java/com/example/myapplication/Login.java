@@ -58,9 +58,18 @@ public class Login extends AppCompatActivity {
         forgotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                forgotUser();
+                resetPassword(); // Renomeie para resetPassword
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            redirectToAppropriateActivity(currentUser.getUid());
+        }
     }
 
     private void loginUser() {
@@ -78,8 +87,7 @@ public class Login extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(Login.this, "Login Success", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-                    String userId = user.getUid(); // Obtenha o ID do usuário
-                    redirectToAppropriateActivity(userId); // Redirecionar baseado no tipo
+                    redirectToAppropriateActivity(user.getUid());
                 } else {
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -87,7 +95,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void forgotUser() {
+    private void resetPassword() {
         String email = emailEditText.getText().toString().trim();
         if (email.isEmpty()) {
             Toast.makeText(Login.this, "Please enter your email", Toast.LENGTH_SHORT).show();
@@ -129,13 +137,11 @@ public class Login extends AppCompatActivity {
                         String email = dataSnapshot.child("email").getValue(String.class);
                         String address = dataSnapshot.child("address").getValue(String.class);
                         String phone = dataSnapshot.child("phone").getValue(String.class);
-                        String type = dataSnapshot.child("type").getValue(String.class);
 
                         intent = new Intent(Login.this, RestaurantMainActivity.class);
                         intent.putExtra("restaurantName", name);
                         intent.putExtra("email", email);
                         intent.putExtra("restaurantAddress", address);
-                        intent.putExtra("type", type);
                         intent.putExtra("restaurantPhone", phone);
                     } else {
                         Toast.makeText(Login.this, "User type not recognized", Toast.LENGTH_SHORT).show();
