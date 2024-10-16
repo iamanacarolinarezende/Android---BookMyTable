@@ -8,12 +8,17 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import android.view.MenuItem;
+
 
 public class CustomerReservation extends AppCompatActivity {
 
@@ -23,6 +28,8 @@ public class CustomerReservation extends AppCompatActivity {
     EditText editTextTime;
     EditText partySizeEditText;
     Button submitBtn;
+    FirebaseAuth firebaseAuth;
+    BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,7 @@ public class CustomerReservation extends AppCompatActivity {
         editTextTime = findViewById(R.id.editTextTime);
         partySizeEditText = findViewById(R.id.partySizeEditText);
         submitBtn = findViewById(R.id.submit);
+        navigationView = findViewById(R.id.bottom_navigation);
 
         String name = getIntent().getStringExtra("selectedRestaurant");
         String address = getIntent().getStringExtra("restaurantAddress");
@@ -106,6 +114,30 @@ public class CustomerReservation extends AppCompatActivity {
                             }
                         });
             }
-        });;
+        });
+
+
+        navigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        startActivity(new Intent(CustomerReservation.this, CustomerMainActivity.class));
+                        return true;
+
+                    case R.id.navigation_user:
+                        startActivity(new Intent(CustomerReservation.this, RegisterCustomer.class));
+                        return true;
+
+                    case R.id.navigation_logout:
+                        firebaseAuth.signOut();
+                        startActivity(new Intent(CustomerReservation.this, Login.class));
+                        finish();
+                        return true;
+                }
+                return false;
+            }
+        });
+
     }
 }
