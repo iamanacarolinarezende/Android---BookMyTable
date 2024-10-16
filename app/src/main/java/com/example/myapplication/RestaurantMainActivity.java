@@ -59,7 +59,7 @@ public class RestaurantMainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Erro ao carregar dados", error.toException());
+                Log.e("Firebase", "Error loading data", error.toException());
             }
         });
     }
