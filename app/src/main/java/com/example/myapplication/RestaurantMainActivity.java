@@ -35,20 +35,20 @@ public class RestaurantMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_main);
 
-        String userName = getIntent().getStringExtra("email");
+        String userName = getIntent().getStringExtra("restaurantName");
         TextView restaurantGreeting = findViewById(R.id.restaurantGreeting);
         restaurantGreeting.setText("Welcome, " + userName);
 
-        reservationList = new ArrayList<>();
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         reservationAdapter = new ReservationAdapter(this, reservationList);
-        firebaseAuth = FirebaseAuth.getInstance();
+        recyclerView.setAdapter(reservationAdapter);
 
         //Menu Images
         ImageView home = findViewById(R.id.navigation_home_res);
         ImageView user = findViewById(R.id.navigation_user_res);
         ImageView logout = findViewById(R.id.navigation_logout_res);
 
-        // Buscando reservas pendentes para o restaurante logado
         databaseReference = FirebaseDatabase.getInstance().getReference("reservations");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -56,9 +56,15 @@ public class RestaurantMainActivity extends AppCompatActivity {
                 reservationList.clear();
                 for (DataSnapshot reservationSnapshot : snapshot.getChildren()) {
                     Reservation reservation = reservationSnapshot.getValue(Reservation.class);
-                    if (reservation != null && reservation.getRestaurantName().equals("email") &&
-                            reservation.getStatus().equals("Pending")) {
-                        reservationList.add(reservation);
+
+
+                    if (reservation != null && reservation.getEmail() != null) {
+                        String safeEmail = reservation.getEmail().replace(".", ",");
+
+                        if (reservation.getRestaurantName().equals(userName) &&
+                                reservation.getStatus().equals("Pending")) {
+                            reservationList.add(reservation);
+                        }
                     }
                 }
                 reservationAdapter.notifyDataSetChanged();

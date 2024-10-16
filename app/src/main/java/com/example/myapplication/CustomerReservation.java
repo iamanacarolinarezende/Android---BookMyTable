@@ -94,7 +94,6 @@ public class CustomerReservation extends AppCompatActivity {
 
         submitBtn.setOnClickListener(view -> {
             String restaurantName = nameInput.getText().toString();
-            String restaurantAddress = addressInput.getText().toString();
             String date = editTextDate.getText().toString();
             String time = editTextTime.getText().toString();
             String partySize = partySizeEditText.getText().toString();
@@ -102,7 +101,6 @@ public class CustomerReservation extends AppCompatActivity {
             Reservation reservation = new Reservation(
                     date,
                     partySize,
-                    restaurantAddress,
                     restaurantName,
                     "Pending",
                     time,

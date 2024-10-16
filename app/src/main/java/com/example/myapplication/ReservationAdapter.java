@@ -6,11 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.List;
 
@@ -35,23 +43,21 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Reservation reservation = reservationList.get(position);
 
-        // Exibir informações da reserva
         String info = "Date: " + reservation.getDate() + "\n" +
                 "Time: " + reservation.getTime() + "\n" +
                 "Party Size: " + reservation.getPartySize() + "\n" +
                 "Customer: " + reservation.getEmail();
         holder.reservationInfo.setText(info);
 
-        // Ações dos botões "Aceitar" e "Rejeitar"
         holder.acceptButton.setOnClickListener(v -> {
-            // Atualizar o status para "Accepted"
-            updateReservationStatus(reservation, "Accepted");
+            updateReservationStatus(reservation.getEmail(), "Accepted", reservation.getDate(), reservation.getTime(), reservation.getPartySize(), reservation.getRestaurantName());
         });
 
         holder.rejectButton.setOnClickListener(v -> {
-            // Atualizar o status para "Rejected"
-            updateReservationStatus(reservation, "Rejected");
+            updateReservationStatus(reservation.getEmail(), "Rejected", reservation.getDate(), reservation.getTime(), reservation.getPartySize(), reservation.getRestaurantName());
         });
+
+
     }
 
     @Override
@@ -71,10 +77,73 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         }
     }
 
-    private void updateReservationStatus(Reservation reservation, String newStatus) {
-        // Aqui você pode implementar a lógica para atualizar o status no Firebase
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("reservations");
-        databaseReference.child(reservation.getEmail())
-                .child("status").setValue(newStatus);
+    private void updateReservationStatus(String email, String newStatus, String date, String time, String partySize, String restaurantName) {
+        DatabaseReference reservationRef = FirebaseDatabase.getInstance().getReference("reservations");
+
+        // Listening for pending reservations
+        reservationRef.orderByChild("status").equalTo("Pending").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean found = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Reservation reservation = snapshot.getValue(Reservation.class);
+
+                    // Comparing reservation details
+                    if (reservation != null &&
+                            reservation.getEmail().equals(email) &&
+                            reservation.getDate().equals(date) &&
+                            reservation.getTime().equals(time) &&
+                            reservation.getPartySize().equals(partySize) &&
+                            reservation.getRestaurantName().equals(restaurantName)) {
+                        snapshot.getRef().child("status").setValue(newStatus)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "Reservation updated successfully", Toast.LENGTH_SHORT).show();
+                                        fetchPendingReservations(); // Update the list
+                                    } else {
+                                        Toast.makeText(context, "Error updating reservation", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                        found = true; // Reservation found
+                    }
+                }
+                if (!found) {
+                    Toast.makeText(context, "No pending reservation found with the provided details.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(context, "Error loading data.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+    private void fetchPendingReservations() {
+        String safeEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ",");
+        DatabaseReference reservationsRef = FirebaseDatabase.getInstance().getReference("reservations").child(safeEmail);
+
+        reservationsRef.orderByChild("status").equalTo("Pending").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    reservationList.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Reservation reservation = snapshot.getValue(Reservation.class);
+                        reservationList.add(reservation);
+                    }
+                    notifyDataSetChanged();
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(context, "Error fetching data.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
