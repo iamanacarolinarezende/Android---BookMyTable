@@ -13,7 +13,10 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".Reservation"
+            android:name=".CustomerReservation"
+            android:exported="false" />
+        <activity
+            android:name=".RestaurantReservation"
             android:exported="false" />
         <activity
             android:name=".RestaurantMainActivity"

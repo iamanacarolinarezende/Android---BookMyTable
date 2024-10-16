@@ -117,7 +117,7 @@ public class RegisterCustomer extends AppCompatActivity {
 
                                 HashMap<String, String> customerData = new HashMap<>();
                                 customerData.put("email", user.getEmail());
-                                customerData.put("type", "customer"); // identificando que é cliente
+                                customerData.put("type", "customer");
                                 customerData.put("phone", phoneNumber);
 
                                 databaseReference.child(userId).setValue(customerData).addOnCompleteListener(new OnCompleteListener<Void>() {

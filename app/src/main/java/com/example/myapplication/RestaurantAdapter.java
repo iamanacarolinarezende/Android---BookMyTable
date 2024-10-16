@@ -25,10 +25,7 @@ public class RestaurantAdapter extends ArrayAdapter<Restaurant> {
             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
         }
 
-        // Obtém o restaurante
         Restaurant restaurant = getItem(position);
-
-        // Preenche os dados
         TextView nameTextView = convertView.findViewById(android.R.id.text1);
         TextView addressTextView = convertView.findViewById(android.R.id.text2);
 

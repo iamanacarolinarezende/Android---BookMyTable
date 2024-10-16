@@ -1,8 +1,8 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="start"
     android:padding="24dp"
@@ -16,12 +16,13 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="25dp"
             android:src="@drawable/logospot4youhorizontal"/>
     </LinearLayout>
 
     <TextView
+        android:id="@+id/restaurantGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome, [Restaurant]"
@@ -30,135 +31,28 @@
         android:textColor="@color/blue"
         android:layout_marginTop="14dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8sp"
-                android:text="Name:"/>
-            <EditText
-                android:id="@+id/nameInput"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="Restaurant test 1"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textColor="@android:color/black"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8sp"
-                android:text="Email:"/>
-            <EditText
-                android:id="@+id/emailInput"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="test@email.com"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textColor="@android:color/black"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8sp"
-                android:text="Address:"/>
-            <EditText
-                android:id="@+id/addressInput"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="1234 Test, Test Test/CA"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textColor="@android:color/black"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8sp"
-            android:orientation="horizontal">
-            <TextView
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phone number:"/>
-            <EditText
-                android:id="@+id/phoneInput"
-                android:textSize="16sp"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="123 123-1234"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textColor="@android:color/black"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/editButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/green"
-        android:text="Edit your data"
-        android:layout_marginTop="16dp"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pending reservation requests:"
+        android:text="Reservation requests:"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/darkGray"
         android:layout_marginTop="14dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pendingReservationsRecyclerView"
+        android:id="@+id/reservationsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="On-going reservations:"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/darkGray"
-        android:layout_marginTop="14dp"/>
+        android:layout_gravity="bottom"
+        app:menu="@menu/menu_bottom_nav"
+        android:background="@android:color/transparent"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/onGoingReservationsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+
 </LinearLayout>

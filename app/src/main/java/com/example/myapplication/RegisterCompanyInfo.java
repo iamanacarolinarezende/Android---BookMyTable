@@ -52,16 +52,17 @@ public class RegisterCompanyInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Get input from EditTexts
+                String email = getIntent().getStringExtra("email");
                 String restaurantName = restaurantNameEditText.getText().toString().trim();
                 String address = restaurantAddressEditText.getText().toString().trim();
                 String phoneNumber = restaurantPhoneEditText.getText().toString().trim();
 
-                completeRestaurantRegistration(restaurantName, address, phoneNumber);
+                completeRestaurantRegistration(email, restaurantName, address, phoneNumber);
             }
         });
     }
 
-    private void completeRestaurantRegistration(String restaurantName, String address, String phoneNumber) {
+    private void completeRestaurantRegistration(String email, String restaurantName, String address, String phoneNumber) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         if (user != null) {
@@ -70,10 +71,11 @@ public class RegisterCompanyInfo extends AppCompatActivity {
 
             // Creating restaurant data to save in the database
             HashMap<String, String> restaurantData = new HashMap<>();
+            restaurantData.put("email", email);
             restaurantData.put("name", restaurantName);
             restaurantData.put("address", address);
             restaurantData.put("phone", phoneNumber);
-            restaurantData.put("type", "restaurant"); // Identifying that it's a restaurant
+            restaurantData.put("type", "restaurant");
 
             // Save data to the database
             databaseReference.child(userId).setValue(restaurantData).addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,27 +61,26 @@ public class Login extends AppCompatActivity {
                 forgotUser();
             }
         });
-
     }
 
     private void loginUser() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty()){
+        if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return;
         }
+
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(Login.this, "Login Success", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     String userId = user.getUid(); // Obtenha o ID do usuário
                     redirectToAppropriateActivity(userId); // Redirecionar baseado no tipo
-                }
-                else{
+                } else {
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -117,21 +117,25 @@ public class Login extends AppCompatActivity {
 
                     Intent intent;
                     if ("customer".equals(userType)) {
-                        String phone = dataSnapshot.child("phone").getValue(String.class);
+                        String email = dataSnapshot.child("email").getValue(String.class);
+                        String name = dataSnapshot.child("name").getValue(String.class);
 
                         intent = new Intent(Login.this, CustomerMainActivity.class);
-                        intent.putExtra("userPhone", phone);
+                        intent.putExtra("email", email);
+                        intent.putExtra("name", name);
+
                     } else if ("restaurant".equals(userType)) {
-                        // Carrega os dados do restaurante
                         String name = dataSnapshot.child("name").getValue(String.class);
+                        String email = dataSnapshot.child("email").getValue(String.class);
                         String address = dataSnapshot.child("address").getValue(String.class);
-                        String tables = dataSnapshot.child("tables").getValue(String.class);
                         String phone = dataSnapshot.child("phone").getValue(String.class);
+                        String type = dataSnapshot.child("type").getValue(String.class);
 
                         intent = new Intent(Login.this, RestaurantMainActivity.class);
                         intent.putExtra("restaurantName", name);
+                        intent.putExtra("email", email);
                         intent.putExtra("restaurantAddress", address);
-                        intent.putExtra("restaurantTables", tables);
+                        intent.putExtra("type", type);
                         intent.putExtra("restaurantPhone", phone);
                     } else {
                         Toast.makeText(Login.this, "User type not recognized", Toast.LENGTH_SHORT).show();
@@ -146,17 +150,4 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
-    //To remember the login when user come back
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            Intent intent = new Intent(login.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
-
 }

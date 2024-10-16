@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="start"
+    android:padding="24dp"
+    tools:context=".CustomerMainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:src="@drawable/logospot4youhorizontal"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/customerGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, [Costumer]"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:layout_marginTop="14dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Where is you next spot?"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/darkGray"
+        android:layout_marginTop="14dp"/>
+
+    <ListView
+        android:id="@+id/restaurantListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="10dp"
+        android:listSelector="@color/lightGray"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"/>
+
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/createReservationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/green"
+        android:text="Create a new reservation"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/menu_bottom_nav"
+        android:background="@android:color/transparent"/>
+
+</LinearLayout>

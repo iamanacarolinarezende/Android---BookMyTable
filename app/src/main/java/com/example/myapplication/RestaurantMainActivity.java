@@ -4,12 +4,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,89 +20,46 @@ import java.util.List;
 
 public class RestaurantMainActivity extends AppCompatActivity {
 
-    TextView showEmail;
-    FirebaseAuth firebaseAuth;
-    RecyclerView pendingReservationsList, ongoingReservationsList;
-    PendingReservationsAdapter pendingReservationAdapter;
-    OnGoingReservationsAdapter ongoingReservationAdapter;
-
-    List<Reservation> pendingReservations = new ArrayList<>(); // List for pending reservations
-    List<Reservation> ongoingReservations = new ArrayList<>(); // List for ongoing reservations
+    RecyclerView reservationsRecyclerView;
+    ReservationAdapter reservationAdapter;
+    List<Reservation> reservationList = new ArrayList<>();
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_restaurant_main);
 
-        // Initialize RecyclerViews
-        pendingReservationsList = findViewById(R.id.pendingReservationsRecyclerView);
-        ongoingReservationsList = findViewById(R.id.onGoingReservationsRecyclerView);
+        String userName = getIntent().getStringExtra("email");
+        TextView restaurantGreeting = findViewById(R.id.restaurantGreeting);
+        restaurantGreeting.setText("Welcome, " + userName);
 
-        pendingReservationsList.setLayoutManager(new LinearLayoutManager(this));
-        ongoingReservationsList.setLayoutManager(new LinearLayoutManager(this));
+        reservationsRecyclerView = findViewById(R.id.reservationsRecyclerView);
+        reservationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize Adapters
-        pendingReservationAdapter = new PendingReservationsAdapter(pendingReservations, new PendingReservationsAdapter.OnReservationActionListener() {
-            @Override
-            public void onAccept(int position) {
-                // Logic for accepting a reservation
-                Reservation reservation = pendingReservations.get(position);
-                ongoingReservations.add(reservation); // Add to ongoing reservations
-                pendingReservations.remove(position); // Remove from pending
-                pendingReservationAdapter.notifyItemRemoved(position);
-                ongoingReservationAdapter.notifyDataSetChanged(); // Refresh ongoing reservations
-            }
+        reservationList = new ArrayList<>();
+        reservationAdapter = new ReservationAdapter(this, reservationList);
+        reservationsRecyclerView.setAdapter(reservationAdapter);
 
-            @Override
-            public void onReject(int position) {
-                // Logic for rejecting a reservation
-                pendingReservations.remove(position);
-                pendingReservationAdapter.notifyItemRemoved(position);
-            }
-        });
-
-        ongoingReservationAdapter = new OnGoingReservationsAdapter(ongoingReservations);
-
-        pendingReservationsList.setAdapter(pendingReservationAdapter);
-        ongoingReservationsList.setAdapter(ongoingReservationAdapter);
-
-        // Call method to load data from Firebase
-        loadReservationsFromFirebase();
-    }
-
-    private void loadReservationsFromFirebase() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("reservations");
-
-        // Add listener to retrieve data from Firebase
+        // Buscando reservas pendentes para o restaurante logado
+        databaseReference = FirebaseDatabase.getInstance().getReference("reservations");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                pendingReservations.clear();
-                ongoingReservations.clear();
-
-                for (DataSnapshot reservationSnapshot : dataSnapshot.getChildren()) {
-                    String customer = reservationSnapshot.child("Customer").getValue(String.class);
-                    String numberOfPeople = reservationSnapshot.child("NumberOfPeople").getValue(String.class);
-                    String status = reservationSnapshot.child("Status").getValue(String.class); // Assuming you have a status field
-
-                    Reservation reservation = new Reservation(customer, numberOfPeople, status);
-
-                    if ("pending".equalsIgnoreCase(status)) {
-                        pendingReservations.add(reservation); // Add to pending reservations
-                    } else if ("accepted".equalsIgnoreCase(status)) {
-                        ongoingReservations.add(reservation); // Add to ongoing reservations
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                reservationList.clear();
+                for (DataSnapshot reservationSnapshot : snapshot.getChildren()) {
+                    Reservation reservation = reservationSnapshot.getValue(Reservation.class);
+                    if (reservation != null && reservation.getRestaurantName().equals("email") &&
+                            reservation.getStatus().equals("Pending")) {
+                        reservationList.add(reservation);
                     }
                 }
-
-                // Notify adapters that data has changed
-                pendingReservationAdapter.notifyDataSetChanged();
-                ongoingReservationAdapter.notifyDataSetChanged();
+                reservationAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("Firebase", "loadReservations:onCancelled", databaseError.toException());
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Erro ao carregar dados", error.toException());
             }
         });
     }

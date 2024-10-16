@@ -1,79 +1,53 @@
 package com.example.myapplication;
 
-import android.app.DatePickerDialog;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+public class Reservation {
+    private String date;
+    private String partySize;
+    private String restaurantAddress;
+    private String restaurantName;
+    private String status;
+    private String time;
+    private String email;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+    public Reservation() {}
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+    public Reservation(String date, String partySize, String restaurantAddress, String restaurantName,
+                       String status, String time, String email) {
+        this.date = date;
+        this.partySize = partySize;
+        this.restaurantAddress = restaurantAddress;
+        this.restaurantName = restaurantName;
+        this.status = status;
+        this.time = time;
+        this.email = email;
+    }
 
-import java.util.Arrays;
-import java.util.List;
+    // Getters
+    public String getDate() {
+        return date;
+    }
 
-public class Reservation extends AppCompatActivity {
+    public String getPartySize() {
+        return partySize;
+    }
 
-    TextView showEmail;
-    FirebaseAuth firebaseAuth;
+    public String getRestaurantAddress() {
+        return restaurantAddress;
+    }
 
+    public String getRestaurantName() {
+        return restaurantName;
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_reservation);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerCustomer), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    public String getStatus() {
+        return status;
+    }
 
-        showEmail = findViewById(R.id.showEmail);
-        firebaseAuth = FirebaseAuth.getInstance();
+    public String getTime() {
+        return time;
+    }
 
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        String emailUser;
-        if (currentUser != null) {
-            emailUser = currentUser.getEmail();
-            showEmail.setText(emailUser);
-        }
-
-        Spinner tableSpinner;
-
-        // Spinner to select the size of the party. From 1 to 4, in this case.
-        // for more restaurants, need to take it from the database
-        tableSpinner = findViewById(R.id.TableSpinner);
-        List<String> numberOfPersons = Arrays.asList("1", "2", "3", "4");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, numberOfPersons);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tableSpinner.setAdapter(adapter);
-
-        /*
-        Spinner dateSpinner;
-        dateSpinner = findViewById(R.id.dateSpinner);
-        */
-
-
-        // No método onCreate da Activity
-        DatePicker datePickerInline = findViewById(R.id.datePickerInline);
-        datePickerInline.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                // Processar a data selecionada
-                Toast.makeText(Reservation.this, "Data selecionada: " + selectedDate, Toast.LENGTH_SHORT).show();
-            }
-        });
-
+    public String getEmail() {
+        return email;
     }
 }

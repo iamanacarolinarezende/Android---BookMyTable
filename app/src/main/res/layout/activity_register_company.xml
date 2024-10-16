@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:text="Already have an account? Login"
         android:textColor="@color/blue"
-        android:background="@android:color/transparent"
+        android:backgroundTint="@color/lightGray"
         android:paddingVertical="12dp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:text="Are you a restaurant? Click here."
         android:textColor="@color/blue"
-        android:background="@android:color/transparent"
+        android:backgroundTint="@color/lightGray"
         android:paddingVertical="12dp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />

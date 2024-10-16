@@ -100,7 +100,7 @@ public class RegisterCompany extends AppCompatActivity {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
 
                     Intent intent = new Intent(RegisterCompany.this, RegisterCompanyInfo.class);
-                    intent.putExtra("userEmail", email);  // Pass email to the next activity if needed
+                    intent.putExtra("email", email);  // Pass email to the next activity if needed
                     startActivity(intent);
                     finish();
                 } else {
