@@ -59,12 +59,64 @@
         android:backgroundTint="@color/green"
         android:text="Create a new reservation"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/main_menu"
-        android:background="@android:color/transparent"/>
+        android:layout_height="50dp">
+
+        <TableLayout
+            android:id="@+id/menu_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:stretchColumns="*"
+            android:background="@android:color/transparent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <!-- Home -->
+                <ImageView
+                    android:id="@+id/navigation_home"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/home"
+                    android:contentDescription="Home"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/menu_background" />
+
+
+                <!-- User -->
+                <ImageView
+                    android:id="@+id/navigation_user"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/user"
+                    android:contentDescription="User"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+
+                <!-- Logout -->
+                <ImageView
+                    android:id="@+id/navigation_logout"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/logout"
+                    android:contentDescription="Log Out"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
 
 </LinearLayout>
+

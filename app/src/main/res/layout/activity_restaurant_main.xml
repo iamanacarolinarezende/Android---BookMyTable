@@ -41,18 +41,78 @@
         android:layout_marginTop="14dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reservationsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/main_menu"
-        android:background="@android:color/transparent"/>
+        app:layoutManager="LinearLayoutManager" />
+
+
+
+    <!-- Menu -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+        <TableLayout
+            android:id="@+id/menu_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:stretchColumns="*"
+            android:background="@android:color/transparent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <!-- Home -->
+                <ImageView
+                    android:id="@+id/navigation_home_res"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/home"
+                    android:contentDescription="Home"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/menu_background" />
+
+
+                <!-- User -->
+                <ImageView
+                    android:id="@+id/navigation_user_res"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/user"
+                    android:contentDescription="User"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+
+                <!-- Logout -->
+                <ImageView
+                    android:id="@+id/navigation_logout_res"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/logout"
+                    android:contentDescription="Log Out"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+
 
 
 </LinearLayout>
