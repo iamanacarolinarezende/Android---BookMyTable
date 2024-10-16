@@ -149,6 +149,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true">
 
+
         <TableLayout
             android:id="@+id/menu_table"
             android:layout_width="match_parent"

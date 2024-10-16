@@ -1,0 +1,608 @@
+Index: app/src/main/java/com/example/myapplication/CustomerMainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.ListView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class CustomerMainActivity extends AppCompatActivity {\r\n\r\n    Button createReservationBtn;\r\n    ListView restaurantListView;\r\n    ArrayList<Restaurant> restaurantList;\r\n    RestaurantAdapter adapter;\r\n    FirebaseAuth firebaseAuth;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_customer_main);\r\n\r\n        String userName = getIntent().getStringExtra(\"email\");\r\n        TextView customerGreeting = findViewById(R.id.customerGreeting);\r\n        customerGreeting.setText(\"Welcome, \" + userName);\r\n\r\n        restaurantListView = findViewById(R.id.restaurantListView);\r\n        createReservationBtn = findViewById(R.id.createReservationBtn);\r\n\r\n        restaurantList = new ArrayList<>();\r\n        adapter = new RestaurantAdapter(this, restaurantList);\r\n        restaurantListView.setAdapter(adapter);\r\n        firebaseAuth = FirebaseAuth.getInstance();\r\n\r\n        //Menu Images\r\n        ImageView home = findViewById(R.id.navigation_home);\r\n        ImageView user = findViewById(R.id.navigation_user);\r\n        ImageView logout = findViewById(R.id.navigation_logout);\r\n\r\n        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(\"users\");\r\n\r\n        databaseReference.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n                restaurantList.clear();\r\n                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {\r\n                    Restaurant restaurant = snapshot.getValue(Restaurant.class);\r\n                    if (restaurant != null && \"restaurant\".equals(restaurant.getType())) {\r\n                        restaurantList.add(restaurant);\r\n                    }\r\n                }\r\n                adapter.notifyDataSetChanged();\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n                Toast.makeText(CustomerMainActivity.this, \"Error fetching data\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n\r\n        createReservationBtn.setOnClickListener(view -> {\r\n            int selectedPosition = restaurantListView.getCheckedItemPosition();\r\n            if (selectedPosition != ListView.INVALID_POSITION) {\r\n                Restaurant selectedRestaurantObj = restaurantList.get(selectedPosition);\r\n                String selectedRestaurantName = selectedRestaurantObj.getName();\r\n                String selectedRestaurantAddress = selectedRestaurantObj.getAddress();\r\n\r\n                Intent intent = new Intent(CustomerMainActivity.this, CustomerReservation.class);\r\n                intent.putExtra(\"selectedRestaurant\", selectedRestaurantName);\r\n                intent.putExtra(\"restaurantAddress\", selectedRestaurantAddress);\r\n                startActivity(intent);\r\n            } else {\r\n                Toast.makeText(this, \"Please select a restaurant\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n\r\n        //Menu Start\r\n        // Home button\r\n        home.setSelected(true);\r\n        home.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(CustomerMainActivity.this, CustomerMainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        // Send to register page\r\n        user.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(CustomerMainActivity.this, RegisterCustomer.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        //Logout button\r\n        logout.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                firebaseAuth.signOut();\r\n                Toast.makeText(CustomerMainActivity.this, \"You are logged out\", Toast.LENGTH_SHORT).show();\r\n\r\n                // Redirect to Login activity\r\n                Intent intent = new Intent(CustomerMainActivity.this, Login.class);\r\n                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/CustomerMainActivity.java b/app/src/main/java/com/example/myapplication/CustomerMainActivity.java
+--- a/app/src/main/java/com/example/myapplication/CustomerMainActivity.java	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/app/src/main/java/com/example/myapplication/CustomerMainActivity.java	(date 1729111411806)
+@@ -103,7 +103,7 @@
+         user.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                Intent intent = new Intent(CustomerMainActivity.this, RegisterCustomer.class);
++                Intent intent = new Intent(CustomerMainActivity.this, CustomerEditProfile.class);
+                 startActivity(intent);
+             }
+         });
+Index: app/src/main/res/layout/activity_edit_customer_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_edit_customer_profile.xml b/app/src/main/res/layout/activity_edit_customer_profile.xml
+new file mode 100644
+--- /dev/null	(date 1729111756809)
++++ b/app/src/main/res/layout/activity_edit_customer_profile.xml	(date 1729111756809)
+@@ -0,0 +1,140 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    android:gravity="center"
++    android:padding="24dp"
++    tools:context=".RegisterCustomer">
++
++    <ImageView
++        android:id="@+id/logo"
++        android:layout_width="200dp"
++        android:layout_height="100dp"
++        android:src="@drawable/logospot4youhorizontal"/>
++
++    <TextView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="CUSTOMER REGISTER"
++        android:textSize="28sp"
++        android:textStyle="bold"
++        android:textColor="@color/green"
++        android:layout_marginBottom="30dp" />
++
++    <EditText
++        android:id="@+id/emailregister"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Enter your email"
++        android:inputType="textEmailAddress"
++        android:padding="12dp"
++        android:layout_marginBottom="16dp" />
++
++    <EditText
++        android:id="@+id/passwordregister"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Enter your password"
++        android:inputType="textPassword"
++        android:padding="12dp"
++        android:layout_marginBottom="16dp" />
++
++    <EditText
++        android:id="@+id/phoneregister"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Enter your phone number"
++        android:inputType="phone"
++        android:padding="12dp"
++        android:layout_marginBottom="24dp" />
++
++    <Button
++        android:id="@+id/updateCustomer"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="UPDATE"
++        android:textColor="@color/white"
++        android:backgroundTint="@color/green"
++        android:paddingVertical="12dp"
++        android:textStyle="bold"
++        android:layout_marginBottom="16dp" />
++
++    <Button
++        android:id="@+id/deleteCustomer"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Delete Account "
++        android:textColor="@color/red"
++        android:backgroundTint="@color/lightGray"
++        android:paddingVertical="12dp"
++        android:textStyle="bold"
++        android:layout_marginBottom="16dp" />
++
++    <!-- Menu -->
++    <View
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        android:layout_weight="1"/>
++
++    <RelativeLayout
++        xmlns:android="http://schemas.android.com/apk/res/android"
++        android:layout_width="match_parent"
++        android:layout_height="50dp">
++
++        <TableLayout
++            android:id="@+id/menu_table"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_alignParentBottom="true"
++            android:stretchColumns="*"
++            android:background="@android:color/transparent">
++
++            <TableRow
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:gravity="center">
++
++                <!-- Home -->
++                <ImageView
++                    android:id="@+id/navigation_home"
++                    android:layout_width="28dp"
++                    android:layout_height="28dp"
++                    android:src="@drawable/home"
++                    android:contentDescription="Home"
++                    android:layout_margin="8dp"
++                    android:clickable="true"
++                    android:focusable="true"
++                    android:scaleType="fitCenter"
++                    android:background="@drawable/menu_background" />
++
++
++                <!-- User -->
++                <ImageView
++                    android:id="@+id/navigation_user"
++                    android:layout_width="28dp"
++                    android:layout_height="28dp"
++                    android:src="@drawable/user"
++                    android:contentDescription="User"
++                    android:layout_margin="8dp"
++                    android:clickable="true"
++                    android:focusable="true"
++                    android:scaleType="fitCenter" />
++
++                <!-- Logout -->
++                <ImageView
++                    android:id="@+id/navigation_logout"
++                    android:layout_width="28dp"
++                    android:layout_height="28dp"
++                    android:src="@drawable/logout"
++                    android:contentDescription="Log Out"
++                    android:layout_margin="8dp"
++                    android:clickable="true"
++                    android:focusable="true"
++                    android:scaleType="fitCenter" />
++            </TableRow>
++        </TableLayout>
++    </RelativeLayout>
++</LinearLayout>
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\nagp = \"8.6.1\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.2.1\"\r\nespressoCore = \"3.6.1\"\r\nappcompat = \"1.7.0\"\r\nmaterial = \"1.12.0\"\r\nactivity = \"1.9.2\"\r\nconstraintlayout = \"2.1.4\"\r\ngoogleGmsGoogleServices = \"4.4.2\"\r\nfirebaseAuth = \"23.0.0\"\r\nfirebaseDatabase = \"21.0.0\"\r\n\r\n[libraries]\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\next-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nespresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\nappcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\nactivity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nconstraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\nfirebase-auth = { group = \"com.google.firebase\", name = \"firebase-auth\", version.ref = \"firebaseAuth\" }\r\nfirebase-database = { group = \"com.google.firebase\", name = \"firebase-database\", version.ref = \"firebaseDatabase\" }\r\n\r\n[plugins]\r\nandroid-application = { id = \"com.android.application\", version.ref = \"agp\" }\r\ngoogle-gms-google-services = { id = \"com.google.gms.google-services\", version.ref = \"googleGmsGoogleServices\" }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/gradle/libs.versions.toml	(date 1729111156771)
+@@ -8,8 +8,11 @@
+ activity = "1.9.2"
+ constraintlayout = "2.1.4"
+ googleGmsGoogleServices = "4.4.2"
++firebaseBom = "32.0.0"
+ firebaseAuth = "23.0.0"
+ firebaseDatabase = "21.0.0"
++firebaseFirestore = "24.0.1"
++firebaseFirestoreVersion = "25.1.0"
+ 
+ [libraries]
+ junit = { group = "junit", name = "junit", version.ref = "junit" }
+@@ -21,8 +24,10 @@
+ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+ firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
++firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestore" }
++firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
++firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestoreVersion" }
+ 
+ [plugins]
+ android-application = { id = "com.android.application", version.ref = "agp" }
+ google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+-
+Index: app/src/main/java/com/example/myapplication/CustomerEditProfile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/CustomerEditProfile.java b/app/src/main/java/com/example/myapplication/CustomerEditProfile.java
+new file mode 100644
+--- /dev/null	(date 1729114097786)
++++ b/app/src/main/java/com/example/myapplication/CustomerEditProfile.java	(date 1729114097786)
+@@ -0,0 +1,162 @@
++package com.example.myapplication;
++
++import android.content.Intent;
++import android.os.Bundle;
++import android.view.View;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.ImageView;
++import android.widget.Toast;
++
++import androidx.activity.EdgeToEdge;
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.database.DataSnapshot;
++import com.google.firebase.database.DatabaseError;
++import com.google.firebase.database.DatabaseReference;
++import com.google.firebase.database.FirebaseDatabase;
++import com.google.firebase.database.ValueEventListener;
++
++import java.util.HashMap;
++import java.util.Map;
++
++public class CustomerEditProfile extends AppCompatActivity {
++    private EditText emailEditText, phoneEditText, passwordEditText;
++    private Button updateButton, deleteButton;
++    private FirebaseAuth auth;
++    private DatabaseReference userRef;
++    private FirebaseUser currentUser;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        EdgeToEdge.enable(this);
++        setContentView(R.layout.activity_edit_customer_profile);
++
++        emailEditText = findViewById(R.id.emailregister);
++        phoneEditText = findViewById(R.id.phoneregister);
++        passwordEditText = findViewById(R.id.passwordregister);
++        updateButton = findViewById(R.id.updateCustomer);
++        deleteButton = findViewById(R.id.deleteCustomer);
++
++        auth = FirebaseAuth.getInstance();
++        currentUser = auth.getCurrentUser();
++
++        // Referência ao Realtime Database
++        userRef = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
++
++        loadUserData();
++
++        // Menu de navegação
++        ImageView home = findViewById(R.id.navigation_home);
++        ImageView user = findViewById(R.id.navigation_user);
++        ImageView logout = findViewById(R.id.navigation_logout);
++
++        updateButton.setOnClickListener(view -> updateUserData());
++        deleteButton.setOnClickListener(view -> deleteUserAccount());
++
++        home.setOnClickListener(v -> startActivity(new Intent(this, CustomerMainActivity.class)));
++        user.setSelected(true);
++        user.setOnClickListener(v -> startActivity(new Intent(this, CustomerEditProfile.class)));
++
++        logout.setOnClickListener(v -> {
++            auth.signOut();
++            Toast.makeText(this, "You are logged out", Toast.LENGTH_SHORT).show();
++            Intent intent = new Intent(this, Login.class);
++            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
++            startActivity(intent);
++            finish();
++        });
++    }
++
++    private void loadUserData() {
++        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
++            @Override
++            public void onDataChange(DataSnapshot snapshot) {
++                if (snapshot.exists()) {
++                    String email = snapshot.child("email").getValue(String.class);
++                    String phone = snapshot.child("phone").getValue(String.class);
++
++                    emailEditText.setText(email);
++                    phoneEditText.setText(phone);
++                } else {
++                    Toast.makeText(CustomerEditProfile.this, "User data not found", Toast.LENGTH_SHORT).show();
++                }
++            }
++
++            @Override
++            public void onCancelled(DatabaseError error) {
++                Toast.makeText(CustomerEditProfile.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
++            }
++        });
++    }
++
++    private void updateUserData() {
++        String newEmail = emailEditText.getText().toString().trim();
++        String newPhone = phoneEditText.getText().toString().trim();
++        String newPassword = passwordEditText.getText().toString().trim();
++
++        if (newEmail.isEmpty() || newPhone.isEmpty()) {
++            Toast.makeText(this, "Email and phone cannot be empty", Toast.LENGTH_SHORT).show();
++            return;
++        }
++
++        // Obter referência ao usuário atual no Realtime Database
++        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
++
++        // Criar um mapa com os dados atualizados
++        Map<String, Object> updates = new HashMap<>();
++        updates.put("email", newEmail);
++        updates.put("phone", newPhone);
++
++        // Atualizar email do Firebase Authentication
++        currentUser. verifyBeforeUpdateEmail(newEmail).addOnCompleteListener(task -> {
++            if (task.isSuccessful()) {
++                // Atualizar dados no Realtime Database
++                userRef.updateChildren(updates).addOnCompleteListener(task1 -> {
++                    if (task1.isSuccessful()) {
++                        if (!newPassword.isEmpty()) {
++                            // Atualizar a senha se foi fornecida
++                            currentUser.updatePassword(newPassword).addOnCompleteListener(task2 -> {
++                                if (task2.isSuccessful()) {
++                                    Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
++                                } else {
++                                    Toast.makeText(this, "Password update failed: " + task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
++                                }
++                            });
++                        } else {
++                            Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
++                        }
++                    } else {
++                        Toast.makeText(this, "Failed to update Realtime Database: " + task1.getException().getMessage(), Toast.LENGTH_SHORT).show();
++                    }
++                });
++            } else {
++                Toast.makeText(this, "Failed to update email: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
++            }
++        });
++    }
++
++
++    private void deleteUserAccount() {
++        currentUser.delete().addOnCompleteListener(task -> {
++            if (task.isSuccessful()) {
++                userRef.removeValue().addOnCompleteListener(task1 -> {
++                    if (task1.isSuccessful()) {
++                        Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
++                        auth.signOut();
++                        Intent intent = new Intent(this, Login.class);
++                        startActivity(intent);
++                        finish();
++                    } else {
++                        Toast.makeText(this, "Error deleting user data", Toast.LENGTH_SHORT).show();
++                    }
++                });
++            } else {
++                Toast.makeText(this, "Error deleting account", Toast.LENGTH_SHORT).show();
++            }
++        });
++    }
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AndroidLayouts\">\r\n    <shared>\r\n      <config />\r\n    </shared>\r\n    <layouts>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_customer_main.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_customer_reservation.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_register_company.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_register_company_info.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash_page.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/item_reservation.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n    </layouts>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"NONE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"04b155f8-a566-4cc9-a17d-625edcd06c92\" name=\"Changes\" comment=\"menu finished for customer and restaurant\">\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ClangdSettings\">\r\n    <option name=\"formatViaClangd\" value=\"false\" />\r\n  </component>\r\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\\Users\\pluck\\.android\\avd\\Pixel_8_API_35.avd)]\" />\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$/app\">\r\n          <activation />\r\n        </task>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"app\" type=\"2d1252cf:ModuleNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"app\" type=\"2d1252cf:ModuleNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"app\" type=\"2d1252cf:ModuleNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n                <item name=\"other\" type=\"c8890929:TasksNode$1\" />\r\n              </path>\r\n            </expand>\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n        <option value=\"resourceFile\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PUSH_TAGS\">\r\n      <GitPushTagMode>\r\n        <option name=\"argument\" value=\"--tags\" />\r\n        <option name=\"title\" value=\"All\" />\r\n      </GitPushTagMode>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;Lignorun&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/iamanacarolinarezende/Android-Spot4You.git&quot;,\r\n    &quot;accountId&quot;: &quot;4bebf754-9f53-4085-88e9-1fcc87253362&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2mwRC2hjXXhaTb66uce2eW9KHtU\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Android App.app.executor&quot;: &quot;Run&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,\r\n    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,\r\n    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_directory_selection&quot;: &quot;C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/dlins/Lasalle/4-Android/Android-Spot4You&quot;,\r\n    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CreateClassDialog.RecentsKey\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.-1366844987\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.-1514106115\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\pluck\\AndroidStudioProjects\\Android-Spot4You\\app\\src\\main\\res\\menu\" />\r\n      <recent name=\"C:\\Users\\pluck\\AndroidStudioProjects\\Android-Spot4You\\app\\src\\main\\res\\layout\" />\r\n    </key>\r\n    <key name=\"android.template.19657185\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.2016699759\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"app\" type=\"AndroidRunConfigurationType\" factoryName=\"Android App\" activateToolWindowBeforeRun=\"false\">\r\n      <module name=\"My_Application.app.main\" />\r\n      <option name=\"DEPLOY\" value=\"true\" />\r\n      <option name=\"DEPLOY_APK_FROM_BUNDLE\" value=\"false\" />\r\n      <option name=\"DEPLOY_AS_INSTANT\" value=\"false\" />\r\n      <option name=\"ARTIFACT_NAME\" value=\"\" />\r\n      <option name=\"PM_INSTALL_OPTIONS\" value=\"\" />\r\n      <option name=\"ALL_USERS\" value=\"false\" />\r\n      <option name=\"ALWAYS_INSTALL_WITH_PM\" value=\"false\" />\r\n      <option name=\"CLEAR_APP_STORAGE\" value=\"false\" />\r\n      <option name=\"DYNAMIC_FEATURES_DISABLED_LIST\" value=\"\" />\r\n      <option name=\"ACTIVITY_EXTRA_FLAGS\" value=\"\" />\r\n      <option name=\"MODE\" value=\"default_activity\" />\r\n      <option name=\"CLEAR_LOGCAT\" value=\"false\" />\r\n      <option name=\"SHOW_LOGCAT_AUTOMATICALLY\" value=\"false\" />\r\n      <option name=\"TARGET_SELECTION_MODE\" value=\"DEVICE_AND_SNAPSHOT_COMBO_BOX\" />\r\n      <option name=\"SELECTED_CLOUD_MATRIX_CONFIGURATION_ID\" value=\"-1\" />\r\n      <option name=\"SELECTED_CLOUD_MATRIX_PROJECT_ID\" value=\"\" />\r\n      <option name=\"DEBUGGER_TYPE\" value=\"Auto\" />\r\n      <Auto>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Auto>\r\n      <Hybrid>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Hybrid>\r\n      <Java>\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Java>\r\n      <Native>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Native>\r\n      <Profilers>\r\n        <option name=\"ADVANCED_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_CPU_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_CPU_PROFILING_CONFIGURATION_NAME\" value=\"Java/Kotlin Method Sample (legacy)\" />\r\n        <option name=\"STARTUP_NATIVE_MEMORY_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"NATIVE_MEMORY_SAMPLE_RATE_BYTES\" value=\"2048\" />\r\n      </Profilers>\r\n      <option name=\"DEEP_LINK\" value=\"\" />\r\n      <option name=\"ACTIVITY_CLASS\" value=\"\" />\r\n      <option name=\"SEARCH_ACTIVITY_IN_GLOBAL_SCOPE\" value=\"false\" />\r\n      <option name=\"SKIP_ACTIVITY_VALIDATION\" value=\"false\" />\r\n      <method v=\"2\">\r\n        <option name=\"Android.Gradle.BeforeRunTask\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"04b155f8-a566-4cc9-a17d-625edcd06c92\" name=\"Changes\" comment=\"\" />\r\n      <created>1727985520597</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1727985520597</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Mais uma tentativa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727987431129</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727987431129</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Mais uma tentativa 2\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727987528974</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727987528974</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Mais uma tentativa 3\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727988112862</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727988112862</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Splash Page. Tem que testar ai tb\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727994164632</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727994164632</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Splash Page. Tem que testar ai tb\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727994182076</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727994182076</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"Splash Page. Tem que testar ai tb\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728054813808</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728054813808</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"Login and Register XML\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728064314457</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728064314457</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"Simple Login and Register finished\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728079510738</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728079510738</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"User login (add phone and create at firebase the user type customer)&#10;Restaurant login (add all the information and create at firebase the user type restaurant)&#10;Main Activity brings the type information based on type of register.\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728090005274</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728090005274</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"fixed some issues\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728176815548</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728176815548</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"First spinner. Number of persons on the table\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728576085459</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728576085459</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"Reservation layout. Starting\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728580060790</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728580060790</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"Reservation layout. Starting\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728760106317</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728760106317</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00014\" summary=\"Reservation layout. Starting\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728763518793</created>\r\n      <option name=\"number\" value=\"00014\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00014\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728763518793</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00015\" summary=\"fixed menu and start to make it works on different xml\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1729056249951</created>\r\n      <option name=\"number\" value=\"00015\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00015\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1729056249951</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00016\" summary=\"menu finished for customer and restaurant\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1729100039942</created>\r\n      <option name=\"number\" value=\"00016\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00016\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1729100039942</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"17\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Mais uma tentativa\" />\r\n    <MESSAGE value=\"Mais uma tentativa 2\" />\r\n    <MESSAGE value=\"Mais uma tentativa 3\" />\r\n    <MESSAGE value=\"Splash Page. Tem que testar ai tb\" />\r\n    <MESSAGE value=\"Login and Register XML\" />\r\n    <MESSAGE value=\"Simple Login and Register finished\" />\r\n    <MESSAGE value=\"User login (add phone and create at firebase the user type customer)&#10;Restaurant login (add all the information and create at firebase the user type restaurant)&#10;Main Activity brings the type information based on type of register.\" />\r\n    <MESSAGE value=\"fixed some issues\" />\r\n    <MESSAGE value=\"First spinner. Number of persons on the table\" />\r\n    <MESSAGE value=\"Reservation layout. Starting\" />\r\n    <MESSAGE value=\"fixed menu and start to make it works on different xml\" />\r\n    <MESSAGE value=\"menu finished for customer and restaurant\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"menu finished for customer and restaurant\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/.idea/workspace.xml	(date 1729111738086)
+@@ -15,6 +15,11 @@
+           <theme>@style/Theme.MyApplication</theme>
+         </config>
+       </layout>
++      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_edit_customer_profile.xml">
++        <config>
++          <theme>@style/Theme.MyApplication</theme>
++        </config>
++      </layout>
+       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml">
+         <config>
+           <theme>@style/Theme.MyApplication</theme>
+@@ -62,9 +67,22 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="menu finished for customer and restaurant">
++      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerEditProfile.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_customer_profile.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/resourceHashesCache.bin" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerMainActivity.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerReservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/CustomerReservation.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_customer_reservation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_customer_reservation.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -159,25 +177,25 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+-    &quot;last_directory_selection&quot;: &quot;C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dlins/Lasalle/4-Android/Android-Spot4You&quot;,
+-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "Android App.app.executor": "Run",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.cidr.known.project.marker": "true",
++    "RunOnceActivity.readMode.enableVisualFormatting": "true",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "cf.first.check.clang-format": "false",
++    "cidr.known.project.marker": "true",
++    "com.google.services.firebase.aqiPopupShown": "true",
++    "git-widget-placeholder": "main",
++    "ignore.virus.scanning.warn.message": "true",
++    "kotlin-language-version-configured": "true",
++    "last_directory_selection": "C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java",
++    "last_opened_file_path": "C:/Users/dlins/Lasalle/4-Android/Android-Spot4You",
++    "run.code.analysis.last.selected.profile": "pProject Default",
++    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="CreateClassDialog.RecentsKey">
+       <recent name="com.example.myapplication" />
+@@ -191,6 +209,9 @@
+     <key name="MoveFile.RECENT_KEYS">
+       <recent name="C:\Users\pluck\AndroidStudioProjects\Android-Spot4You\app\src\main\res\menu" />
+       <recent name="C:\Users\pluck\AndroidStudioProjects\Android-Spot4You\app\src\main\res\layout" />
++    </key>
++    <key name="android.template.-1454079810">
++      <recent name="com.example.myapplication" />
+     </key>
+     <key name="android.template.19657185">
+       <recent name="com.example.myapplication" />
+@@ -407,7 +428,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1729100039942</updated>
+     </task>
+-    <option name="localTasksCounter" value="17" />
++    <task id="LOCAL-00017" summary="menu finished for customer and restaurant">
++      <option name="closed" value="true" />
++      <created>1729106972588</created>
++      <option name="number" value="00017" />
++      <option name="presentableId" value="LOCAL-00017" />
++      <option name="project" value="LOCAL" />
++      <updated>1729106972588</updated>
++    </task>
++    <option name="localTasksCounter" value="18" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+Index: app/src/main/java/com/example/myapplication/RestaurantMainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class RestaurantMainActivity extends AppCompatActivity {\r\n\r\n    ReservationAdapter reservationAdapter;\r\n    List<Reservation> reservationList = new ArrayList<>();\r\n    DatabaseReference databaseReference;\r\n    FirebaseAuth firebaseAuth;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_restaurant_main);\r\n\r\n        String userName = getIntent().getStringExtra(\"email\");\r\n        TextView restaurantGreeting = findViewById(R.id.restaurantGreeting);\r\n        restaurantGreeting.setText(\"Welcome, \" + userName);\r\n\r\n        reservationList = new ArrayList<>();\r\n        reservationAdapter = new ReservationAdapter(this, reservationList);\r\n        firebaseAuth = FirebaseAuth.getInstance();\r\n\r\n        //Menu Images\r\n        ImageView home = findViewById(R.id.navigation_home_res);\r\n        ImageView user = findViewById(R.id.navigation_user_res);\r\n        ImageView logout = findViewById(R.id.navigation_logout_res);\r\n\r\n        // Buscando reservas pendentes para o restaurante logado\r\n        databaseReference = FirebaseDatabase.getInstance().getReference(\"reservations\");\r\n        databaseReference.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                reservationList.clear();\r\n                for (DataSnapshot reservationSnapshot : snapshot.getChildren()) {\r\n                    Reservation reservation = reservationSnapshot.getValue(Reservation.class);\r\n                    if (reservation != null && reservation.getRestaurantName().equals(\"email\") &&\r\n                            reservation.getStatus().equals(\"Pending\")) {\r\n                        reservationList.add(reservation);\r\n                    }\r\n                }\r\n                reservationAdapter.notifyDataSetChanged();\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError error) {\r\n                Log.e(\"Firebase\", \"Error loading data\", error.toException());\r\n            }\r\n        });\r\n\r\n        //Menu Start\r\n        // Home button\r\n        home.setSelected(true);\r\n        home.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(RestaurantMainActivity.this, RestaurantMainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        // Send to register page\r\n        user.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(RestaurantMainActivity.this, RegisterCompany.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        //Logout button\r\n        logout.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                firebaseAuth.signOut();\r\n                Toast.makeText(RestaurantMainActivity.this, \"You are logged out\", Toast.LENGTH_SHORT).show();\r\n\r\n                // Redirect to Login activity\r\n                Intent intent = new Intent(RestaurantMainActivity.this, Login.class);\r\n                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java b/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java
+--- a/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/app/src/main/java/com/example/myapplication/RestaurantMainActivity.java	(date 1729111578813)
+@@ -53,15 +53,18 @@
+         databaseReference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+-                reservationList.clear();
+-                for (DataSnapshot reservationSnapshot : snapshot.getChildren()) {
+-                    Reservation reservation = reservationSnapshot.getValue(Reservation.class);
+-                    if (reservation != null && reservation.getRestaurantName().equals("email") &&
+-                            reservation.getStatus().equals("Pending")) {
+-                        reservationList.add(reservation);
+-                    }
++                String status = snapshot.child("status").getValue(String.class);
++
++                // Verifica se 'status' não é nulo antes de comparar
++                if ("open".equals(status)) {
++                    // Restaurante está aberto
++                    System.out.println("Restaurante aberto.");
++                } else if ("closed".equals(status)) {
++                    // Restaurante está fechado
++                    System.out.println("Restaurante fechado.");
++                } else {
++                    System.out.println("Status desconhecido.");
+                 }
+-                reservationAdapter.notifyDataSetChanged();
+             }
+ 
+             @Override
+Index: app/src/main/java/com/example/myapplication/CustomerReservation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication;\r\n\r\nimport android.content.Intent;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.app.DatePickerDialog;\r\nimport android.app.TimePickerDialog;\r\nimport android.os.Bundle;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport java.util.Calendar;\r\n\r\n\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport android.view.MenuItem;\r\n\r\n\r\npublic class CustomerReservation extends AppCompatActivity {\r\n\r\n    EditText nameInput;\r\n    EditText addressInput;\r\n    EditText editTextDate;\r\n    EditText editTextTime;\r\n    EditText partySizeEditText;\r\n    Button submitBtn;\r\n    FirebaseAuth firebaseAuth;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_customer_reservation);\r\n\r\n        nameInput = findViewById(R.id.nameInput);\r\n        addressInput = findViewById(R.id.addressInput);\r\n        editTextDate = findViewById(R.id.editTextDate);\r\n        editTextTime = findViewById(R.id.editTextTime);\r\n        partySizeEditText = findViewById(R.id.partySizeEditText);\r\n        submitBtn = findViewById(R.id.submit);\r\n        firebaseAuth = FirebaseAuth.getInstance();\r\n\r\n        //Menu Images\r\n        ImageView home = findViewById(R.id.navigation_home);\r\n        ImageView user = findViewById(R.id.navigation_user);\r\n        ImageView logout = findViewById(R.id.navigation_logout);\r\n\r\n\r\n        String name = getIntent().getStringExtra(\"selectedRestaurant\");\r\n        String address = getIntent().getStringExtra(\"restaurantAddress\");\r\n        String userEmail = getIntent().getStringExtra(\"email\");\r\n\r\n        nameInput.setText(name);\r\n        addressInput.setText(address);\r\n\r\n        editTextDate.setOnClickListener(view -> {\r\n            final Calendar calendar = Calendar.getInstance();\r\n            int year = calendar.get(Calendar.YEAR);\r\n            int month = calendar.get(Calendar.MONTH);\r\n            int day = calendar.get(Calendar.DAY_OF_MONTH);\r\n\r\n            DatePickerDialog datePickerDialog = new DatePickerDialog(\r\n                    this,\r\n                    (view1, year1, monthOfYear, dayOfMonth) -> {\r\n                        String selectedDate = dayOfMonth + \"/\" + (monthOfYear + 1) + \"/\" + year1;\r\n                        editTextDate.setText(selectedDate);\r\n                    },\r\n                    year, month, day\r\n            );\r\n            datePickerDialog.show();\r\n        });\r\n\r\n        editTextTime.setOnClickListener(view -> {\r\n            final Calendar calendar = Calendar.getInstance();\r\n            int hour = calendar.get(Calendar.HOUR_OF_DAY);\r\n            int minute = calendar.get(Calendar.MINUTE);\r\n\r\n            TimePickerDialog timePickerDialog = new TimePickerDialog(\r\n                    this,\r\n                    (view1, hourOfDay, minute1) -> {\r\n                        String selectedTime = String.format(\"%02d:%02d\", hourOfDay, minute1);\r\n                        editTextTime.setText(selectedTime);\r\n                    },\r\n                    hour, minute, true\r\n            );\r\n            timePickerDialog.show();\r\n        });\r\n\r\n        submitBtn.setOnClickListener(view -> {\r\n            String restaurantName = nameInput.getText().toString();\r\n            String restaurantAddress = addressInput.getText().toString();\r\n            String date = editTextDate.getText().toString();\r\n            String time = editTextTime.getText().toString();\r\n            String partySize = partySizeEditText.getText().toString();\r\n\r\n            Reservation reservation = new Reservation(\r\n                    date,\r\n                    partySize,\r\n                    restaurantAddress,\r\n                    restaurantName,\r\n                    \"Pending\",\r\n                    time,\r\n                    userEmail\r\n            );\r\n\r\n            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(\"reservations\");\r\n            String reservationId = databaseReference.push().getKey(); // Gera uma chave única para cada reserva\r\n            if (reservationId != null) {\r\n                databaseReference.child(reservationId).setValue(reservation)\r\n                        .addOnCompleteListener(task -> {\r\n                            if (task.isSuccessful()) {\r\n                                Toast.makeText(CustomerReservation.this, \"Reservation submitted successfully!\", Toast.LENGTH_SHORT).show();\r\n                                Intent intent = new Intent(CustomerReservation.this, CustomerMainActivity.class);\r\n                            } else {\r\n                                Toast.makeText(CustomerReservation.this, \"Failed to submit reservation.\", Toast.LENGTH_SHORT).show();\r\n                            }\r\n                        });\r\n            }\r\n        });\r\n\r\n        //Menu Start\r\n        // Home button\r\n        home.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(CustomerReservation.this, CustomerMainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        // Send to register page\r\n        user.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(CustomerReservation.this, RegisterCustomer.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        //Logout button\r\n        logout.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                firebaseAuth.signOut();\r\n                Toast.makeText(CustomerReservation.this, \"You are logged out\", Toast.LENGTH_SHORT).show();\r\n\r\n                // Redirect to Login activity\r\n                Intent intent = new Intent(CustomerReservation.this, Login.class);\r\n                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n        });\r\n\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/CustomerReservation.java b/app/src/main/java/com/example/myapplication/CustomerReservation.java
+--- a/app/src/main/java/com/example/myapplication/CustomerReservation.java	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/app/src/main/java/com/example/myapplication/CustomerReservation.java	(date 1729111445533)
+@@ -138,7 +138,7 @@
+         user.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                Intent intent = new Intent(CustomerReservation.this, RegisterCustomer.class);
++                Intent intent = new Intent(CustomerReservation.this, CustomerEditProfile.class);
+                 startActivity(intent);
+             }
+         });
+Index: app/src/main/res/layout/activity_customer_reservation.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:gravity=\"start\"\r\n    android:padding=\"24dp\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:gravity=\"start\"\r\n        android:layout_marginBottom=\"24dp\">\r\n\r\n        <ImageView\r\n            android:id=\"@+id/logo\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"25dp\"\r\n            android:src=\"@drawable/logospot4youhorizontal\"/>\r\n    </LinearLayout>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\">\r\n            <TextView\r\n                android:textSize=\"16sp\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginEnd=\"8sp\"\r\n                android:text=\"Name:\"/>\r\n            <EditText\r\n                android:id=\"@+id/nameInput\"\r\n                android:textSize=\"16sp\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"Restaurant test 1\"\r\n                android:background=\"@android:color/transparent\"\r\n                android:enabled=\"false\"\r\n                android:textColor=\"@android:color/black\"/>\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\"/>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\">\r\n            <TextView\r\n                android:textSize=\"16dp\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginEnd=\"8sp\"\r\n                android:text=\"Address:\"/>\r\n            <EditText\r\n                android:id=\"@+id/addressInput\"\r\n                android:textSize=\"16sp\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"1234 Test, Test Test/CA\"\r\n                android:background=\"@android:color/transparent\"\r\n                android:enabled=\"false\"\r\n                android:textColor=\"@android:color/black\"/>\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginEnd=\"8sp\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_marginBottom=\"20dp\"/>\r\n    </LinearLayout>\r\n\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Please select the party size, date, and time:\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <EditText\r\n        android:id=\"@+id/partySizeEditText\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:hint=\"Enter party size\"\r\n        android:inputType=\"number\"\r\n        android:padding=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"/>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <EditText\r\n            android:id=\"@+id/editTextDate\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:layout_marginBottom=\"10dp\"\r\n            android:focusable=\"false\"\r\n            android:hint=\"Select Date\"\r\n            android:inputType=\"none\"\r\n            android:padding=\"10dp\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/editTextTime\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:layout_marginBottom=\"10dp\"\r\n            android:focusable=\"false\"\r\n            android:hint=\"Select Time\"\r\n            android:inputType=\"none\"\r\n            android:padding=\"10dp\" />\r\n    </LinearLayout>\r\n\r\n    <Button\r\n        android:layout_gravity=\"center\"\r\n        android:id=\"@+id/submit\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:backgroundTint=\"@color/green\"\r\n        android:text=\"Submit\"\r\n        android:layout_marginBottom=\"10dp\"/>\r\n\r\n    <!-- Menu -->\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_weight=\"1\"/>\r\n\r\n    <RelativeLayout\r\n        xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"50dp\"\r\n        android:layout_alignParentBottom=\"true\">\r\n\r\n        <TableLayout\r\n            android:id=\"@+id/menu_table\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_alignParentBottom=\"true\"\r\n            android:stretchColumns=\"*\"\r\n            android:background=\"@android:color/transparent\">\r\n\r\n            <TableRow\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:gravity=\"center\">\r\n\r\n                <!-- Home -->\r\n                <ImageView\r\n                    android:id=\"@+id/navigation_home\"\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:src=\"@drawable/home\"\r\n                    android:contentDescription=\"Home\"\r\n                    android:layout_margin=\"8dp\"\r\n                    android:clickable=\"true\"\r\n                    android:focusable=\"true\"\r\n                    android:scaleType=\"fitCenter\"\r\n                    android:background=\"@drawable/menu_background\" />\r\n\r\n\r\n                <!-- User -->\r\n                <ImageView\r\n                    android:id=\"@+id/navigation_user\"\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:src=\"@drawable/user\"\r\n                    android:contentDescription=\"User\"\r\n                    android:layout_margin=\"8dp\"\r\n                    android:clickable=\"true\"\r\n                    android:focusable=\"true\"\r\n                    android:scaleType=\"fitCenter\" />\r\n\r\n                <!-- Logout -->\r\n                <ImageView\r\n                    android:id=\"@+id/navigation_logout\"\r\n                    android:layout_width=\"28dp\"\r\n                    android:layout_height=\"28dp\"\r\n                    android:src=\"@drawable/logout\"\r\n                    android:contentDescription=\"Log Out\"\r\n                    android:layout_margin=\"8dp\"\r\n                    android:clickable=\"true\"\r\n                    android:focusable=\"true\"\r\n                    android:scaleType=\"fitCenter\" />\r\n            </TableRow>\r\n        </TableLayout>\r\n    </RelativeLayout>\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_customer_reservation.xml b/app/src/main/res/layout/activity_customer_reservation.xml
+--- a/app/src/main/res/layout/activity_customer_reservation.xml	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/app/src/main/res/layout/activity_customer_reservation.xml	(date 1729111738041)
+@@ -149,6 +149,7 @@
+         android:layout_height="50dp"
+         android:layout_alignParentBottom="true">
+ 
++
+         <TableLayout
+             android:id="@+id/menu_table"
+             android:layout_width="match_parent"
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.google.gms.google.services)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.myapplication\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.myapplication\"\r\n        minSdk = 26\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation(libs.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.activity)\r\n    implementation(libs.constraintlayout)\r\n    implementation(libs.firebase.auth)\r\n    implementation(libs.firebase.database)\r\n    implementation(\"com.google.android.material:material:1.9.0\")\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.ext.junit)\r\n    androidTestImplementation(libs.espresso.core)\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/app/build.gradle.kts	(date 1729111156803)
+@@ -40,7 +40,10 @@
+     implementation(libs.firebase.auth)
+     implementation(libs.firebase.database)
+     implementation("com.google.android.material:material:1.9.0")
++    implementation(libs.firebase.firestore)
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.ext.junit)
+     androidTestImplementation(libs.espresso.core)
+-}
+\ No newline at end of file
++    implementation (libs.firebase.bom)
++}
++
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.MyApplication\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".CustomerReservation\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RestaurantReservation\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RestaurantMainActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RegisterCompanyInfo\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RegisterCompany\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Login\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".RegisterCustomer\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".SplashPage\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity> <!-- MainActivity sem intent-filter -->\r\n        <activity\r\n            android:name=\".CustomerMainActivity\"\r\n            android:exported=\"true\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 4127bfe3de09c2dcce9aea0f02b85b6852d6286a)
++++ b/app/src/main/AndroidManifest.xml	(date 1729107558533)
+@@ -13,6 +13,9 @@
+         android:theme="@style/Theme.MyApplication"
+         tools:targetApi="31">
+         <activity
++            android:name=".CustomerEditProfile"
++            android:exported="false" />
++        <activity
+             android:name=".CustomerReservation"
+             android:exported="false" />
+         <activity

@@ -56,8 +56,6 @@ public class RestaurantMainActivity extends AppCompatActivity {
                 reservationList.clear();
                 for (DataSnapshot reservationSnapshot : snapshot.getChildren()) {
                     Reservation reservation = reservationSnapshot.getValue(Reservation.class);
-
-
                     if (reservation != null && reservation.getEmail() != null) {
                         String safeEmail = reservation.getEmail().replace(".", ",");
 
@@ -91,7 +89,7 @@ public class RestaurantMainActivity extends AppCompatActivity {
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RestaurantMainActivity.this, RegisterCompany.class);
+                Intent intent = new Intent(RestaurantMainActivity.this, RestaurantEditProfile.class);
                 startActivity(intent);
             }
         });
