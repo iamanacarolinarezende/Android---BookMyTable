@@ -1,0 +1,119 @@
+Index: app/src/main/res/layout/activity_reservation.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:gravity=\"center\"\r\n    android:padding=\"24dp\"\r\n    tools:context=\".Reservation\">\r\n\r\n    <!-- Title -->\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Make Your Reservation\"\r\n        android:textSize=\"28sp\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/green\"\r\n        android:layout_marginTop=\"14dp\"\r\n        android:layout_marginBottom=\"24dp\"/>\r\n\r\n    <!-- Show User Email -->\r\n    <TextView\r\n        android:id=\"@+id/showEmail\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/green\"\r\n        android:layout_marginBottom=\"16dp\"/>\r\n\r\n    <!-- Restaurant Name -->\r\n    <TextView\r\n        android:id=\"@+id/showRestaurantName\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/yellow\"\r\n        android:text=\"Restaurant Name Here\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <!-- Restaurant Address -->\r\n    <TextView\r\n        android:id=\"@+id/showRestaurantAddress\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"@color/yellow\"\r\n        android:text=\"Restaurant Address Here\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <!-- Instructions -->\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"@color/lightGray\"\r\n        android:text=\"Please select the party size, date, and time\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <!-- Party Size Input -->\r\n    <EditText\r\n        android:id=\"@+id/partySizeEditText\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:hint=\"Enter party size\"\r\n        android:inputType=\"number\"\r\n        android:minHeight=\"48dp\"\r\n        android:padding=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"/>\r\n\r\n    <!-- Table Spinner (Optional if you want to keep it) -->\r\n    <Spinner\r\n        android:id=\"@+id/TableSpinner\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:spinnerMode=\"dropdown\"\r\n        android:minHeight=\"48dp\"\r\n        android:padding=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        android:layout_marginTop=\"10dp\"/>\r\n\r\n    <!-- Date Picker -->\r\n    <DatePicker\r\n        android:id=\"@+id/datePickerInline\"\r\n        android:layout_width=\"299dp\"\r\n        android:layout_height=\"209dp\"\r\n        android:layout_marginBottom=\"10dp\" />\r\n\r\n    <!-- Time Picker -->\r\n    <TimePicker\r\n        android:id=\"@+id/timePicker\"\r\n        android:layout_width=\"224dp\"\r\n        android:layout_height=\"71dp\"\r\n        android:layout_marginBottom=\"16dp\"\r\n        android:timePickerMode=\"spinner\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/makeReservationBtn\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Make Your Reservation\"/>\r\n\r\n</LinearLayout>\r\n
+===================================================================
+diff --git a/app/src/main/res/layout/activity_reservation.xml b/app/src/main/res/layout/activity_reservation.xml
+--- a/app/src/main/res/layout/activity_reservation.xml	
++++ b/app/src/main/res/layout/activity_reservation.xml	
+@@ -7,20 +7,19 @@
+     android:orientation="vertical"
+     android:gravity="center"
+     android:padding="24dp"
+-    tools:context=".Reservation">
++    android:id="@+id/registerCustomer"
++    tools:context=".RegisterCustomer">
+ 
+-    <!-- Title -->
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="Make Your Reservation"
++        android:text="Make your reservation"
+         android:textSize="28sp"
+         android:textStyle="bold"
+         android:textColor="@color/green"
+         android:layout_marginTop="14dp"
+         android:layout_marginBottom="24dp"/>
+ 
+-    <!-- Show User Email -->
+     <TextView
+         android:id="@+id/showEmail"
+         android:layout_width="wrap_content"
+@@ -29,47 +28,43 @@
+         android:textColor="@color/green"
+         android:layout_marginBottom="16dp"/>
+ 
+-    <!-- Restaurant Name -->
+     <TextView
+         android:id="@+id/showRestaurantName"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textStyle="bold"
+         android:textColor="@color/yellow"
+-        android:text="Restaurant Name Here"
++        android:text="show restaurant name here"
+         android:layout_marginBottom="5dp"/>
+ 
+-    <!-- Restaurant Address -->
+     <TextView
+         android:id="@+id/showRestaurantAddress"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/yellow"
+-        android:text="Restaurant Address Here"
++        android:text="show restaurant address here"
+         android:layout_marginBottom="5dp"/>
+ 
+-    <!-- Instructions -->
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/lightGray"
+-        android:text="Please select the party size, date, and time"
++        android:text="Please, select the party size, date and time"
+         android:layout_marginBottom="5dp"/>
+ 
+-    <!-- Party Size Input -->
+-    <EditText
+-        android:id="@+id/partySizeEditText"
++    <Spinner
++        android:id="@+id/TableSpinner"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:hint="Enter party size"
+-        android:inputType="number"
++        android:spinnerMode="dropdown"
+         android:minHeight="48dp"
+         android:padding="10dp"
+-        android:layout_marginBottom="10dp"/>
++        android:layout_marginBottom="10dp"
++        android:layout_marginTop="10dp"/>
+ 
+-    <!-- Table Spinner (Optional if you want to keep it) -->
++
+     <Spinner
+-        android:id="@+id/TableSpinner"
++        android:id="@+id/dateSpinner"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:spinnerMode="dropdown"
+@@ -78,25 +73,12 @@
+         android:layout_marginBottom="10dp"
+         android:layout_marginTop="10dp"/>
+ 
+-    <!-- Date Picker -->
+-    <DatePicker
+-        android:id="@+id/datePickerInline"
+-        android:layout_width="299dp"
+-        android:layout_height="209dp"
+-        android:layout_marginBottom="10dp" />
+-
+-    <!-- Time Picker -->
+-    <TimePicker
+-        android:id="@+id/timePicker"
+-        android:layout_width="224dp"
+-        android:layout_height="71dp"
+-        android:layout_marginBottom="16dp"
+-        android:timePickerMode="spinner" />
+-
+     <Button
+         android:id="@+id/makeReservationBtn"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="Make Your Reservation"/>
++        android:text="Make your reservation"/>
++
++
+ 
+ </LinearLayout>

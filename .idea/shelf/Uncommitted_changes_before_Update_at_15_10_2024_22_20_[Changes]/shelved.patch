@@ -1,0 +1,395 @@
+Index: app/src/main/java/com/example/myapplication/Reservation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication;\r\n\r\nimport android.app.DatePickerDialog;\r\nimport android.os.Bundle;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\n\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\npublic class Reservation extends AppCompatActivity {\r\n\r\n    TextView showEmail;\r\n    FirebaseAuth firebaseAuth;\r\n    private Spinner tableSpinner;\r\n    private Spinner dateSpinner;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_reservation);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.registerCustomer), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        showEmail = findViewById(R.id.showEmail);\r\n        firebaseAuth = FirebaseAuth.getInstance();\r\n\r\n        FirebaseUser currentUser = firebaseAuth.getCurrentUser();\r\n        String emailUser = \" \";\r\n        if (currentUser != null) {\r\n            emailUser = currentUser.getEmail();\r\n            showEmail.setText(emailUser);\r\n        }\r\n\r\n        // Spinner to select the size of the party. From 1 to 4, in this case.\r\n        // for more restaurants, need to take it from the database\r\n        tableSpinner = findViewById(R.id.TableSpinner);\r\n        List<String> numberOfPersons = Arrays.asList(\"1\", \"2\", \"3\", \"4\");\r\n        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,\r\n                android.R.layout.simple_spinner_item, numberOfPersons);\r\n        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\r\n        tableSpinner.setAdapter(adapter);\r\n\r\n\r\n        dateSpinner = findViewById(R.id.dateSpinner);\r\n        dateSpinner.setSelection(0); // The today date\r\n        // to select another date\r\n        dateSpinner.setOnClickListener(v -> {\r\n            DatePickerDialog datePickerDialog = new DatePickerDialog(\r\n                    Reservation.this,\r\n                    (view, year, month, dayOfMonth) -> {\r\n                        // Formatar a data selecionada como \"dd/MM/yyyy\"\r\n                        String selectedDate = dayOfMonth + \"/\" + (month + 1) + \"/\" + year;\r\n                        // Definir a data selecionada no Spinner\r\n                        tableSpinner.setSelection(0);\r\n                        ArrayAdapter<String> newAdapter = new ArrayAdapter<>(this,\r\n                                android.R.layout.simple_spinner_item, Arrays.asList(selectedDate));\r\n                        newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\r\n                        tableSpinner.setAdapter(newAdapter);\r\n                    },\r\n                    java.util.Calendar.getInstance().get(java.util.Calendar.YEAR),\r\n                    java.util.Calendar.getInstance().get(java.util.Calendar.MONTH),\r\n                    java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_MONTH)\r\n            );\r\n            datePickerDialog.show();\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/myapplication/Reservation.java b/app/src/main/java/com/example/myapplication/Reservation.java
+--- a/app/src/main/java/com/example/myapplication/Reservation.java	(revision 478044aca7683ec563825bba2e6f48c061e6ff20)
++++ b/app/src/main/java/com/example/myapplication/Reservation.java	(date 1729030040323)
+@@ -3,6 +3,7 @@
+ import android.app.DatePickerDialog;
+ import android.os.Bundle;
+ import android.widget.ArrayAdapter;
++import android.widget.EditText;
+ import android.widget.Spinner;
+ import android.widget.TextView;
+ 
+@@ -16,6 +17,7 @@
+ import com.google.firebase.auth.FirebaseUser;
+ 
+ import java.util.Arrays;
++import java.util.Calendar;
+ import java.util.List;
+ 
+ public class Reservation extends AppCompatActivity {
+@@ -56,7 +58,27 @@
+         tableSpinner.setAdapter(adapter);
+ 
+ 
+-        dateSpinner = findViewById(R.id.dateSpinner);
++        EditText editTextDate = findViewById(R.id.editTextDate);
++
++        editTextDate.setOnClickListener(view -> {
++            final Calendar calendar = Calendar.getInstance();
++            int year = calendar.get(Calendar.YEAR);
++            int month = calendar.get(Calendar.MONTH);
++            int day = calendar.get(Calendar.DAY_OF_MONTH);
++
++            DatePickerDialog datePickerDialog = new DatePickerDialog(
++                    this,
++                    (view1, year1, monthOfYear, dayOfMonth) -> {
++                        String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1;
++                        editTextDate.setText(selectedDate);
++                    },
++                    year, month, day
++            );
++            datePickerDialog.show();
++        });
++
++
++
+         dateSpinner.setSelection(0); // The today date
+         // to select another date
+         dateSpinner.setOnClickListener(v -> {
+Index: app/src/main/res/layout/activity_reservation.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:gravity=\"center\"\r\n    android:padding=\"24dp\"\r\n    android:id=\"@+id/registerCustomer\"\r\n    tools:context=\".RegisterCustomer\">\r\n\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Make your reservation\"\r\n        android:textSize=\"28sp\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/green\"\r\n        android:layout_marginTop=\"14dp\"\r\n        android:layout_marginBottom=\"24dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/showEmail\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/green\"\r\n        android:layout_marginBottom=\"16dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/showRestaurantName\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textStyle=\"bold\"\r\n        android:textColor=\"@color/yellow\"\r\n        android:text=\"show restaurant name here\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/showRestaurantAddress\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"@color/yellow\"\r\n        android:text=\"show restaurant address here\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <TextView\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textColor=\"@color/lightGray\"\r\n        android:text=\"Please, select the party size, date and time\"\r\n        android:layout_marginBottom=\"5dp\"/>\r\n\r\n    <Spinner\r\n        android:id=\"@+id/TableSpinner\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:spinnerMode=\"dropdown\"\r\n        android:minHeight=\"48dp\"\r\n        android:padding=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        android:layout_marginTop=\"10dp\"/>\r\n\r\n\r\n    <Spinner\r\n        android:id=\"@+id/dateSpinner\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:spinnerMode=\"dropdown\"\r\n        android:minHeight=\"48dp\"\r\n        android:padding=\"10dp\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        android:layout_marginTop=\"10dp\"/>\r\n\r\n    <Button\r\n        android:id=\"@+id/makeReservationBtn\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Make your reservation\"/>\r\n\r\n\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_reservation.xml b/app/src/main/res/layout/activity_reservation.xml
+--- a/app/src/main/res/layout/activity_reservation.xml	(revision 478044aca7683ec563825bba2e6f48c061e6ff20)
++++ b/app/src/main/res/layout/activity_reservation.xml	(date 1729029992556)
+@@ -7,19 +7,20 @@
+     android:orientation="vertical"
+     android:gravity="center"
+     android:padding="24dp"
+-    android:id="@+id/registerCustomer"
+-    tools:context=".RegisterCustomer">
++    tools:context=".Reservation">
+ 
++    <!-- Title -->
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="Make your reservation"
++        android:text="Make Your Reservation"
+         android:textSize="28sp"
+         android:textStyle="bold"
+         android:textColor="@color/green"
+         android:layout_marginTop="14dp"
+         android:layout_marginBottom="24dp"/>
+ 
++    <!-- Show User Email -->
+     <TextView
+         android:id="@+id/showEmail"
+         android:layout_width="wrap_content"
+@@ -28,43 +29,47 @@
+         android:textColor="@color/green"
+         android:layout_marginBottom="16dp"/>
+ 
++    <!-- Restaurant Name -->
+     <TextView
+         android:id="@+id/showRestaurantName"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textStyle="bold"
+         android:textColor="@color/yellow"
+-        android:text="show restaurant name here"
++        android:text="Restaurant Name Here"
+         android:layout_marginBottom="5dp"/>
+ 
++    <!-- Restaurant Address -->
+     <TextView
+         android:id="@+id/showRestaurantAddress"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/yellow"
+-        android:text="show restaurant address here"
++        android:text="Restaurant Address Here"
+         android:layout_marginBottom="5dp"/>
+ 
++    <!-- Instructions -->
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/lightGray"
+-        android:text="Please, select the party size, date and time"
++        android:text="Please select the party size, date, and time"
+         android:layout_marginBottom="5dp"/>
+ 
+-    <Spinner
+-        android:id="@+id/TableSpinner"
++    <!-- Party Size Input -->
++    <EditText
++        android:id="@+id/partySizeEditText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:spinnerMode="dropdown"
++        android:hint="Enter party size"
++        android:inputType="number"
+         android:minHeight="48dp"
+         android:padding="10dp"
+-        android:layout_marginBottom="10dp"
+-        android:layout_marginTop="10dp"/>
++        android:layout_marginBottom="10dp"/>
+ 
+-
++    <!-- Table Spinner (Optional if you want to keep it) -->
+     <Spinner
+-        android:id="@+id/dateSpinner"
++        android:id="@+id/TableSpinner"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:spinnerMode="dropdown"
+@@ -73,12 +78,34 @@
+         android:layout_marginBottom="10dp"
+         android:layout_marginTop="10dp"/>
+ 
++    <!-- Date Picker -->
++    <DatePicker
++        android:id="@+id/datePickerInline"
++        android:layout_width="299dp"
++        android:layout_height="209dp"
++        android:layout_marginBottom="10dp" />
++
++    <EditText
++        android:id="@+id/editTextDate"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:hint="Select Date"
++        android:inputType="none"
++        android:focusable="false"
++        android:layout_marginBottom="10dp" />
++
++    <!-- Time Picker -->
++    <TimePicker
++        android:id="@+id/timePicker"
++        android:layout_width="224dp"
++        android:layout_height="71dp"
++        android:layout_marginBottom="16dp"
++        android:timePickerMode="spinner" />
++
+     <Button
+         android:id="@+id/makeReservationBtn"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="Make your reservation"/>
+-
++        android:text="Make Your Reservation"/>
+ 
+-
+-</LinearLayout>
++</LinearLayout>
+\ No newline at end of file
+Index: .gradle/config.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Thu Oct 10 12:32:56 EDT 2024\r\njava.home=C\\:\\\\Program Files\\\\Android\\\\Android Studio1\\\\jbr\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/.gradle/config.properties b/.gradle/config.properties
+--- a/.gradle/config.properties	(revision 478044aca7683ec563825bba2e6f48c061e6ff20)
++++ b/.gradle/config.properties	(date 1729008922413)
+@@ -1,2 +1,2 @@
+-#Thu Oct 10 12:32:56 EDT 2024
+-java.home=C\:\\Program Files\\Android\\Android Studio1\\jbr
++#Tue Oct 15 12:15:22 EDT 2024
++java.home=C\:\\Program Files\\Android\\Android Studio\\jbr
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AndroidLayouts\">\r\n    <shared>\r\n      <config />\r\n    </shared>\r\n    <layouts>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_register_company.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_register_company_info.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_reservation.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash_page.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n      <layout url=\"file://$PROJECT_DIR$/app/src/main/res/layout/item_reservation.xml\">\r\n        <config>\r\n          <theme>@style/Theme.MyApplication</theme>\r\n        </config>\r\n      </layout>\r\n    </layouts>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"NONE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"04b155f8-a566-4cc9-a17d-625edcd06c92\" name=\"Changes\" comment=\"deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation\">\r\n      <change afterPath=\"$PROJECT_DIR$/app/src/main/res/layout/item_reservation.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ClangdSettings\">\r\n    <option name=\"formatViaClangd\" value=\"false\" />\r\n  </component>\r\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\\Users\\Guilherme\\.android\\avd\\Medium_Phone_API_35.avd)]\" />\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$/app\">\r\n          <activation />\r\n        </task>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"app\" type=\"2d1252cf:ModuleNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"app\" type=\"2d1252cf:ModuleNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"My Application\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"app\" type=\"2d1252cf:ModuleNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n                <item name=\"other\" type=\"c8890929:TasksNode$1\" />\r\n              </path>\r\n            </expand>\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n        <option value=\"resourceFile\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PUSH_TAGS\">\r\n      <GitPushTagMode>\r\n        <option name=\"argument\" value=\"--tags\" />\r\n        <option name=\"title\" value=\"All\" />\r\n      </GitPushTagMode>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;Lignorun&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/iamanacarolinarezende/Android-Spot4You.git&quot;,\r\n    &quot;accountId&quot;: &quot;d73f463a-3e98-446b-ad28-e044b17a18dd&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProblemsViewState\">\r\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2mwRC2hjXXhaTb66uce2eW9KHtU\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Android App.app.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.cidr.known.project.marker\": \"true\",\r\n    \"RunOnceActivity.readMode.enableVisualFormatting\": \"true\",\r\n    \"android.gradle.sync.needed\": \"true\",\r\n    \"cf.first.check.clang-format\": \"false\",\r\n    \"cidr.known.project.marker\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_directory_selection\": \"C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java\",\r\n    \"last_opened_file_path\": \"C:/Users/Guilherme/AndroidStudioProjects/Class1\",\r\n    \"run.code.analysis.last.selected.profile\": \"pProject Default\",\r\n    \"settings.editor.selected.configurable\": \"reference.settingsdialog.project.gradle\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CreateClassDialog.RecentsKey\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.-1366844987\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.-1514106115\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.19657185\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"android.template.2016699759\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n    <key name=\"CopyClassDialog.RECENTS_KEY\">\r\n      <recent name=\"com.example.myapplication\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"app\" type=\"AndroidRunConfigurationType\" factoryName=\"Android App\" activateToolWindowBeforeRun=\"false\">\r\n      <module name=\"My_Application.app.main\" />\r\n      <option name=\"DEPLOY\" value=\"true\" />\r\n      <option name=\"DEPLOY_APK_FROM_BUNDLE\" value=\"false\" />\r\n      <option name=\"DEPLOY_AS_INSTANT\" value=\"false\" />\r\n      <option name=\"ARTIFACT_NAME\" value=\"\" />\r\n      <option name=\"PM_INSTALL_OPTIONS\" value=\"\" />\r\n      <option name=\"ALL_USERS\" value=\"false\" />\r\n      <option name=\"ALWAYS_INSTALL_WITH_PM\" value=\"false\" />\r\n      <option name=\"CLEAR_APP_STORAGE\" value=\"false\" />\r\n      <option name=\"DYNAMIC_FEATURES_DISABLED_LIST\" value=\"\" />\r\n      <option name=\"ACTIVITY_EXTRA_FLAGS\" value=\"\" />\r\n      <option name=\"MODE\" value=\"default_activity\" />\r\n      <option name=\"CLEAR_LOGCAT\" value=\"false\" />\r\n      <option name=\"SHOW_LOGCAT_AUTOMATICALLY\" value=\"false\" />\r\n      <option name=\"TARGET_SELECTION_MODE\" value=\"DEVICE_AND_SNAPSHOT_COMBO_BOX\" />\r\n      <option name=\"SELECTED_CLOUD_MATRIX_CONFIGURATION_ID\" value=\"-1\" />\r\n      <option name=\"SELECTED_CLOUD_MATRIX_PROJECT_ID\" value=\"\" />\r\n      <option name=\"DEBUGGER_TYPE\" value=\"Auto\" />\r\n      <Auto>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Auto>\r\n      <Hybrid>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Hybrid>\r\n      <Java>\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Java>\r\n      <Native>\r\n        <option name=\"USE_JAVA_AWARE_DEBUGGER\" value=\"false\" />\r\n        <option name=\"SHOW_STATIC_VARS\" value=\"true\" />\r\n        <option name=\"WORKING_DIR\" value=\"\" />\r\n        <option name=\"TARGET_LOGGING_CHANNELS\" value=\"lldb process:gdb-remote packets\" />\r\n        <option name=\"SHOW_OPTIMIZED_WARNING\" value=\"true\" />\r\n        <option name=\"ATTACH_ON_WAIT_FOR_DEBUGGER\" value=\"false\" />\r\n        <option name=\"DEBUG_SANDBOX_SDK\" value=\"false\" />\r\n      </Native>\r\n      <Profilers>\r\n        <option name=\"ADVANCED_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_CPU_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"STARTUP_CPU_PROFILING_CONFIGURATION_NAME\" value=\"Java/Kotlin Method Sample (legacy)\" />\r\n        <option name=\"STARTUP_NATIVE_MEMORY_PROFILING_ENABLED\" value=\"false\" />\r\n        <option name=\"NATIVE_MEMORY_SAMPLE_RATE_BYTES\" value=\"2048\" />\r\n      </Profilers>\r\n      <option name=\"DEEP_LINK\" value=\"\" />\r\n      <option name=\"ACTIVITY_CLASS\" value=\"\" />\r\n      <option name=\"SEARCH_ACTIVITY_IN_GLOBAL_SCOPE\" value=\"false\" />\r\n      <option name=\"SKIP_ACTIVITY_VALIDATION\" value=\"false\" />\r\n      <method v=\"2\">\r\n        <option name=\"Android.Gradle.BeforeRunTask\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"04b155f8-a566-4cc9-a17d-625edcd06c92\" name=\"Changes\" comment=\"\" />\r\n      <created>1727985520597</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1727985520597</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Mais uma tentativa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727987431129</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727987431129</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Mais uma tentativa 2\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727987528974</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727987528974</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Mais uma tentativa 3\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727988112862</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727988112862</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Splash Page. Tem que testar ai tb\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727994164632</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727994164632</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Splash Page. Tem que testar ai tb\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1727994182076</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1727994182076</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"Splash Page. Tem que testar ai tb\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728054813808</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728054813808</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"Login and Register XML\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728064314457</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728064314457</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"Simple Login and Register finished\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728079510738</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728079510738</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00009\" summary=\"User login (add phone and create at firebase the user type customer)&#10;Restaurant login (add all the information and create at firebase the user type restaurant)&#10;Main Activity brings the type information based on type of register.\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728090005274</created>\r\n      <option name=\"number\" value=\"00009\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728090005274</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00010\" summary=\"fixed some issues\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728176815548</created>\r\n      <option name=\"number\" value=\"00010\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728176815548</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00011\" summary=\"First spinner. Number of persons on the table\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728576085459</created>\r\n      <option name=\"number\" value=\"00011\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728576085459</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00012\" summary=\"Reservation layout. Starting\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728580060790</created>\r\n      <option name=\"number\" value=\"00012\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728580060790</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00013\" summary=\"deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1728580389644</created>\r\n      <option name=\"number\" value=\"00013\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00013\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1728580389644</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"14\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Mais uma tentativa\" />\r\n    <MESSAGE value=\"Mais uma tentativa 2\" />\r\n    <MESSAGE value=\"Mais uma tentativa 3\" />\r\n    <MESSAGE value=\"Splash Page. Tem que testar ai tb\" />\r\n    <MESSAGE value=\"Login and Register XML\" />\r\n    <MESSAGE value=\"Simple Login and Register finished\" />\r\n    <MESSAGE value=\"User login (add phone and create at firebase the user type customer)&#10;Restaurant login (add all the information and create at firebase the user type restaurant)&#10;Main Activity brings the type information based on type of register.\" />\r\n    <MESSAGE value=\"fixed some issues\" />\r\n    <MESSAGE value=\"First spinner. Number of persons on the table\" />\r\n    <MESSAGE value=\"Reservation layout. Starting\" />\r\n    <MESSAGE value=\"deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 478044aca7683ec563825bba2e6f48c061e6ff20)
++++ b/.idea/workspace.xml	(date 1729030176165)
+@@ -56,10 +56,18 @@
+     <option name="autoReloadType" value="NONE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation">
+-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_reservation.xml" afterDir="false" />
++    <list default="true" id="04b155f8-a566-4cc9-a17d-625edcd06c92" name="Changes" comment="fixed some issues">
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/8.7/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.7/fileHashes/resourceHashesCache.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/config.properties" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_restaurant_main.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Reservation.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_reservation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_reservation.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -69,55 +77,16 @@
+   <component name="ClangdSettings">
+     <option name="formatViaClangd" value="false" />
+   </component>
+-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\Guilherme\.android\avd\Medium_Phone_API_35.avd)]" />
++  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\pluck\.android\avd\Pixel_8_API_35.avd)]" />
+   <component name="ExternalProjectsData">
+     <projectState path="$PROJECT_DIR$">
+       <ProjectState />
+     </projectState>
+-  </component>
+-  <component name="ExternalProjectsManager">
+-    <system id="GRADLE">
+-      <state>
+-        <task path="$PROJECT_DIR$/app">
+-          <activation />
+-        </task>
+-        <projects_view>
+-          <tree_state>
+-            <expand>
+-              <path>
+-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+-                <item name="My Application" type="f1a62948:ProjectNode" />
+-              </path>
+-              <path>
+-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+-                <item name="My Application" type="f1a62948:ProjectNode" />
+-                <item name="app" type="2d1252cf:ModuleNode" />
+-              </path>
+-              <path>
+-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+-                <item name="My Application" type="f1a62948:ProjectNode" />
+-                <item name="app" type="2d1252cf:ModuleNode" />
+-                <item name="Tasks" type="e4a08cd1:TasksNode" />
+-              </path>
+-              <path>
+-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+-                <item name="My Application" type="f1a62948:ProjectNode" />
+-                <item name="app" type="2d1252cf:ModuleNode" />
+-                <item name="Tasks" type="e4a08cd1:TasksNode" />
+-                <item name="other" type="c8890929:TasksNode$1" />
+-              </path>
+-            </expand>
+-            <select />
+-          </tree_state>
+-        </projects_view>
+-      </state>
+-    </system>
+   </component>
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+         <option value="Class" />
+-        <option value="resourceFile" />
+       </list>
+     </option>
+   </component>
+@@ -139,7 +108,7 @@
+   <component name="GithubPullRequestsUISettings">{
+   &quot;selectedUrlAndAccountId&quot;: {
+     &quot;url&quot;: &quot;https://github.com/iamanacarolinarezende/Android-Spot4You.git&quot;,
+-    &quot;accountId&quot;: &quot;d73f463a-3e98-446b-ad28-e044b17a18dd&quot;
++    &quot;accountId&quot;: &quot;4bebf754-9f53-4085-88e9-1fcc87253362&quot;
+   }
+ }</component>
+   <component name="ProblemsViewState">
+@@ -154,24 +123,22 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "Android App.app.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.cidr.known.project.marker": "true",
+-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+-    "android.gradle.sync.needed": "true",
+-    "cf.first.check.clang-format": "false",
+-    "cidr.known.project.marker": "true",
+-    "git-widget-placeholder": "main",
+-    "ignore.virus.scanning.warn.message": "true",
+-    "kotlin-language-version-configured": "true",
+-    "last_directory_selection": "C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java",
+-    "last_opened_file_path": "C:/Users/Guilherme/AndroidStudioProjects/Class1",
+-    "run.code.analysis.last.selected.profile": "pProject Default",
+-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
++    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
++    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_directory_selection&quot;: &quot;C:/Users/pluck/AndroidStudioProjects/Android-Spot4You/app/src/main/java&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/pluck/Downloads/Archive/TestCrud60&quot;,
++    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
+     <key name="CreateClassDialog.RecentsKey">
+       <recent name="com.example.myapplication" />
+@@ -179,9 +146,6 @@
+     <key name="android.template.-1366844987">
+       <recent name="com.example.myapplication" />
+     </key>
+-    <key name="android.template.-1514106115">
+-      <recent name="com.example.myapplication" />
+-    </key>
+     <key name="android.template.19657185">
+       <recent name="com.example.myapplication" />
+     </key>
+@@ -349,31 +313,7 @@
+       <option name="project" value="LOCAL" />
+       <updated>1728176815548</updated>
+     </task>
+-    <task id="LOCAL-00011" summary="First spinner. Number of persons on the table">
+-      <option name="closed" value="true" />
+-      <created>1728576085459</created>
+-      <option name="number" value="00011" />
+-      <option name="presentableId" value="LOCAL-00011" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1728576085459</updated>
+-    </task>
+-    <task id="LOCAL-00012" summary="Reservation layout. Starting">
+-      <option name="closed" value="true" />
+-      <created>1728580060790</created>
+-      <option name="number" value="00012" />
+-      <option name="presentableId" value="LOCAL-00012" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1728580060790</updated>
+-    </task>
+-    <task id="LOCAL-00013" summary="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation">
+-      <option name="closed" value="true" />
+-      <created>1728580389644</created>
+-      <option name="number" value="00013" />
+-      <option name="presentableId" value="LOCAL-00013" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1728580389644</updated>
+-    </task>
+-    <option name="localTasksCounter" value="14" />
++    <option name="localTasksCounter" value="11" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -396,9 +336,6 @@
+     <MESSAGE value="Simple Login and Register finished" />
+     <MESSAGE value="User login (add phone and create at firebase the user type customer)&#10;Restaurant login (add all the information and create at firebase the user type restaurant)&#10;Main Activity brings the type information based on type of register." />
+     <MESSAGE value="fixed some issues" />
+-    <MESSAGE value="First spinner. Number of persons on the table" />
+-    <MESSAGE value="Reservation layout. Starting" />
+-    <MESSAGE value="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation" />
+-    <option name="LAST_COMMIT_MESSAGE" value="deleting  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;, just to reduce the exclamation" />
++    <option name="LAST_COMMIT_MESSAGE" value="fixed some issues" />
+   </component>
+ </project>
+\ No newline at end of file
