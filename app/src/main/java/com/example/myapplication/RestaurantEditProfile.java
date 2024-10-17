@@ -127,7 +127,7 @@ public class RestaurantEditProfile extends AppCompatActivity {
                                 if (task2.isSuccessful()) {
                                     Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(this, "Password update failed: " + task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "To change your password, send us a message", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -138,7 +138,7 @@ public class RestaurantEditProfile extends AppCompatActivity {
                     }
                 });
             } else {
-                Toast.makeText(this, "Failed to update email: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "To change your email, send us a message", Toast.LENGTH_LONG).show();
             }
         });
     }
