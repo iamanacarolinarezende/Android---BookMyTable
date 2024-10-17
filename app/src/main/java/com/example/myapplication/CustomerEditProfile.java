@@ -141,12 +141,10 @@ public class CustomerEditProfile extends AppCompatActivity {
         builder.setTitle("Delete Account");
         builder.setMessage("Please enter your password to confirm account deletion.");
 
-        // Criar EditText para inserir a senha
         EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         builder.setView(input);
 
-        // Configurar os botões do diálogo
         builder.setPositiveButton("Delete", (dialog, which) -> {
             String currentPassword2 = input.getText().toString().trim();
             deleteUserAccount(currentPassword2); // Chamar a função de deletar a conta
@@ -154,7 +152,6 @@ public class CustomerEditProfile extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-        // Mostrar o diálogo
         AlertDialog dialog = builder.create();
         dialog.show();
     }
