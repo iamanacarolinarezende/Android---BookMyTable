@@ -58,7 +58,7 @@ public class Login extends AppCompatActivity {
         forgotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetPassword(); // Renomeie para resetPassword
+                resetPassword();
             }
         });
     }
