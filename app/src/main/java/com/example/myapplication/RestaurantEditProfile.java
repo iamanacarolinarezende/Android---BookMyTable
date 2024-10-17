@@ -45,13 +45,11 @@ public class RestaurantEditProfile extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
-
-        // Referência ao Realtime Database
         userRef = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
 
         loadUserData();
 
-        // Menu de navegação
+        // Menu
         ImageView home = findViewById(R.id.navigation_home);
         ImageView user = findViewById(R.id.navigation_user);
         ImageView logout = findViewById(R.id.navigation_logout);
@@ -112,21 +110,19 @@ public class RestaurantEditProfile extends AppCompatActivity {
             return;
         }
 
-        // Criar um mapa com os dados atualizados
+        // New map with updated data
         Map<String, Object> updates = new HashMap<>();
         updates.put("email", newEmail);
         updates.put("name", newRestaurantName);
         updates.put("address", newRestaurantAddress);
         updates.put("phone", newRestaurantPhone);
 
-        // Atualizar email do Firebase Authentication
+        // Update Firebase
         currentUser.updateEmail(newEmail).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                // Atualizar dados no Realtime Database
                 userRef.updateChildren(updates).addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         if (!newPassword.isEmpty()) {
-                            // Atualizar a senha se foi fornecida
                             currentUser.updatePassword(newPassword).addOnCompleteListener(task2 -> {
                                 if (task2.isSuccessful()) {
                                     Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();

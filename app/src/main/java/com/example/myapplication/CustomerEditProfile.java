@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CustomerEditProfile extends AppCompatActivity {
-    private EditText emailEditText, phoneEditText, passwordEditText;
+    private EditText emailEditText, passwordEditText, phoneEditText;
     private Button updateButton, deleteButton;
     private FirebaseAuth auth;
     private DatabaseReference userRef;
@@ -33,23 +33,21 @@ public class CustomerEditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_edit_customer_profile);
+        setContentView(R.layout.activity_edit_customer_profile); // Nome do layout XML
 
         emailEditText = findViewById(R.id.emailregister);
-        phoneEditText = findViewById(R.id.phoneregister);
         passwordEditText = findViewById(R.id.passwordregister);
+        phoneEditText = findViewById(R.id.phoneregister);
         updateButton = findViewById(R.id.updateCustomer);
         deleteButton = findViewById(R.id.deleteCustomer);
 
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
-
-        // Referência ao Realtime Database
         userRef = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
 
         loadUserData();
 
-        // Menu de navegação
+        // Menu
         ImageView home = findViewById(R.id.navigation_home);
         ImageView user = findViewById(R.id.navigation_user);
         ImageView logout = findViewById(R.id.navigation_logout);
@@ -95,30 +93,25 @@ public class CustomerEditProfile extends AppCompatActivity {
 
     private void updateUserData() {
         String newEmail = emailEditText.getText().toString().trim();
-        String newPhone = phoneEditText.getText().toString().trim();
         String newPassword = passwordEditText.getText().toString().trim();
+        String newPhone = phoneEditText.getText().toString().trim();
 
         if (newEmail.isEmpty() || newPhone.isEmpty()) {
-            Toast.makeText(this, "Email and phone cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email and phone must be filled", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Remover a redefinição da referência
-        // DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
-
-        // Criar um mapa com os dados atualizados
+        // New map with updated data
         Map<String, Object> updates = new HashMap<>();
         updates.put("email", newEmail);
         updates.put("phone", newPhone);
 
-        // Atualizar email do Firebase Authentication
+        // Update Firebase
         currentUser.updateEmail(newEmail).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                // Atualizar dados no Realtime Database
                 userRef.updateChildren(updates).addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         if (!newPassword.isEmpty()) {
-                            // Atualizar a senha se foi fornecida
                             currentUser.updatePassword(newPassword).addOnCompleteListener(task2 -> {
                                 if (task2.isSuccessful()) {
                                     Toast.makeText(this, "User data updated successfully", Toast.LENGTH_SHORT).show();
@@ -138,8 +131,6 @@ public class CustomerEditProfile extends AppCompatActivity {
             }
         });
     }
-
-
 
     private void deleteUserAccount() {
         currentUser.delete().addOnCompleteListener(task -> {
