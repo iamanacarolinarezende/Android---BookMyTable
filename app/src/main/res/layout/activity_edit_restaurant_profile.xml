@@ -33,15 +33,6 @@
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/passwordregister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your password"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp" />
-
-    <EditText
         android:id="@+id/restaurantNameEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,11 +69,22 @@
         android:layout_marginBottom="16dp" />
 
     <Button
+        android:id="@+id/forgotbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset password?"
+        android:textColor="@color/blue"
+        android:backgroundTint="@color/lightGray"
+        android:paddingVertical="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <Button
         android:id="@+id/loginregbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete Account"
-        android:textColor="@color/blue"
+        android:textColor="@color/red"
         android:backgroundTint="@color/lightGray"
         android:paddingVertical="12dp"
         android:textStyle="bold"
