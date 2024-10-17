@@ -147,7 +147,7 @@ public class CustomerEditProfile extends AppCompatActivity {
 
         builder.setPositiveButton("Delete", (dialog, which) -> {
             String currentPassword2 = input.getText().toString().trim();
-            deleteUserAccount(currentPassword2); // Chamar a função de deletar a conta
+            deleteUserAccount(currentPassword2);
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -158,15 +158,14 @@ public class CustomerEditProfile extends AppCompatActivity {
 
 
     private void deleteUserAccount(String currentPassword) {
-        // Reautenticação do usuário com o e-mail e a senha atual
         AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), currentPassword);
 
         currentUser.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
             if (reauthTask.isSuccessful()) {
-                // Exclui a conta da Authentication
+                // Authentication
                 currentUser.delete().addOnCompleteListener(deleteTask -> {
                     if (deleteTask.isSuccessful()) {
-                        // Remove os dados do usuário do Realtime Database
+                        // Realtime Database
                         userRef.removeValue().addOnCompleteListener(dbTask -> {
                             if (dbTask.isSuccessful()) {
                                 Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
