@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context=".RegisterCustomer">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logospot4youhorizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CUSTOMER EDIT PROFILE"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:layout_marginBottom="30dp" />
+
+    <EditText
+        android:id="@+id/emailregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+
+
+    <EditText
+        android:id="@+id/phoneregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your phone number"
+        android:inputType="phone"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/updateCustomer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UPDATE"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/green"
+        android:paddingVertical="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/forgotbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset password?"
+        android:textColor="@color/blue"
+        android:backgroundTint="@color/lightGray"
+        android:paddingVertical="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/deleteCustomer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Account"
+        android:textColor="@color/red"
+        android:backgroundTint="@color/lightGray"
+        android:paddingVertical="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Menu -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TableLayout
+            android:id="@+id/menu_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:stretchColumns="*"
+            android:background="@android:color/transparent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <!-- Home -->
+                <ImageView
+                    android:id="@+id/navigation_home"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/home"
+                    android:contentDescription="Home"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/menu_background" />
+
+
+                <!-- User -->
+                <ImageView
+                    android:id="@+id/navigation_user"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/user"
+                    android:contentDescription="User"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/menu_background"/>
+
+                <!-- Logout -->
+                <ImageView
+                    android:id="@+id/navigation_logout"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/logout"
+                    android:contentDescription="Log Out"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="fitCenter" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+</LinearLayout>

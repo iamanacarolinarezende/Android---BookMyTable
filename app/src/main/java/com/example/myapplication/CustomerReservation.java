@@ -136,7 +136,7 @@ public class CustomerReservation extends AppCompatActivity {
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CustomerReservation.this, RegisterCustomer.class);
+                Intent intent = new Intent(CustomerReservation.this, CustomerEditProfile.class);
                 startActivity(intent);
             }
         });

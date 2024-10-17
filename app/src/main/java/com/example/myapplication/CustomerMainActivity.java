@@ -103,7 +103,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CustomerMainActivity.this, RegisterCustomer.class);
+                Intent intent = new Intent(CustomerMainActivity.this, CustomerEditProfile.class);
                 startActivity(intent);
             }
         });
