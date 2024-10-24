@@ -77,7 +77,7 @@
         android:id="@+id/customertbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Are you a restaurant? Click here."
+        android:text="Are you a customer? Click here."
         android:textColor="@color/blue"
         android:backgroundTint="@color/lightGray"
         android:paddingVertical="12dp"
